@@ -1,0 +1,123 @@
+{
+  "verdict": "Keep v1 as a layout-family-held-out benchmark; not a representative all-domain estimate.",
+  "source_fingerprint": "ec8f920c719736c8b11e45237f8b8016bf1fbea7c4807b6c293b4a137909e5cc",
+  "split_manifest_sha256": "a766fb4f4281fa32a8f342469cd70511422468052c3542f9f97ebaae9515ba43",
+  "checks": {
+    "source_and_artifact_verify": "passed via prepare_data_split.py --verify",
+    "archive_members_match_extracted_source": true,
+    "archive_matched_members": 162,
+    "question_business_family_disjoint": "passed",
+    "source_records_preserved": "passed",
+    "recomputed_summaries": "passed",
+    "reference_format_validation_only": 3000,
+    "public_test_used": false,
+    "holdout_model_predictions_evaluated": false
+  },
+  "partitions": {
+    "train": {
+      "businesses": 18,
+      "questions": 1583,
+      "families": [
+        "flat_csv_lines",
+        "invoice_only_csv",
+        "order_line_export",
+        "pos_invoice_detail",
+        "single_sheet_no_order"
+      ],
+      "answer_types": {
+        "boolean": 11,
+        "date": 77,
+        "list": 86,
+        "number": 1042,
+        "percent": 283,
+        "string": 45,
+        "table": 7,
+        "unanswerable": 32
+      },
+      "industries": {
+        "coffee": 2,
+        "construction": 2,
+        "grocery": 6,
+        "pharmacy": 4,
+        "restaurant": 3,
+        "unknown": 1
+      }
+    },
+    "development": {
+      "businesses": 6,
+      "questions": 708,
+      "families": [
+        "detailed_sales_report",
+        "mixed_sources"
+      ],
+      "answer_types": {
+        "boolean": 7,
+        "date": 36,
+        "list": 40,
+        "number": 420,
+        "percent": 156,
+        "string": 18,
+        "table": 3,
+        "unanswerable": 28
+      },
+      "industries": {
+        "coffee": 1,
+        "construction": 3,
+        "pharmacy": 1,
+        "restaurant": 1
+      }
+    },
+    "calibration": {
+      "businesses": 3,
+      "questions": 355,
+      "families": [
+        "monthly_handwritten",
+        "sqlite_pos"
+      ],
+      "answer_types": {
+        "boolean": 5,
+        "date": 13,
+        "list": 36,
+        "number": 202,
+        "percent": 65,
+        "string": 21,
+        "table": 3,
+        "unanswerable": 10
+      },
+      "industries": {
+        "coffee": 1,
+        "construction": 1,
+        "pharmacy": 1
+      }
+    },
+    "holdout": {
+      "businesses": 3,
+      "questions": 354,
+      "families": [
+        "relational_csv"
+      ],
+      "answer_types": {
+        "date": 19,
+        "list": 31,
+        "number": 220,
+        "percent": 74,
+        "string": 4,
+        "table": 6
+      },
+      "industries": {
+        "coffee": 1,
+        "restaurant": 2
+      }
+    }
+  },
+  "cross_partition_identical_normalized_question_text_groups": 84,
+  "text_overlap_note": "Same question wording across different businesses is not itself identical-data/answer leakage. Family isolation does not imply unseen language or business semantics.",
+  "warnings": [
+    "Holdout has one layout family, coffee/restaurant only, no boolean/unanswerable.",
+    "Grocery appears only in train.",
+    "Development is dominated by detailed_sales_report: 590 of 708 questions.",
+    "SQLite only in calibration: use synthetic/generic adapter tests; label-driven pipeline changes would contaminate calibration.",
+    "Calibration has 10 unanswerable, 5 boolean and 3 table labels; thresholds may be noisy.",
+    "Family/industry annotations are reviewed heuristics, not a proof of semantic independence."
+  ]
+}

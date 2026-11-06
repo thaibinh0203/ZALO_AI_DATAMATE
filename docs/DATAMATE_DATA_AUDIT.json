@@ -1,0 +1,1099 @@
+{
+  "scope": "Read-only inventory; no training/inference or test answer generation",
+  "splits": {
+    "train": {
+      "businesses": 30,
+      "questions": 3000,
+      "question_keys": [
+        "as_of_date",
+        "business_id",
+        "id",
+        "question"
+      ],
+      "file_formats": {
+        ".xlsx": 107,
+        ".md": 30,
+        ".csv": 20,
+        "": 1,
+        ".sqlite": 1
+      },
+      "data_bytes": 193479600,
+      "rulebook_sha256": "740267bccba29df70f745bc39968bbec5b3e62dada2c858c45314f3ec723d113",
+      "answers": 3000,
+      "answer_keys": [
+        "alias",
+        "answer",
+        "id",
+        "type"
+      ],
+      "answer_types": {
+        "number": 1884,
+        "percent": 578,
+        "string": 88,
+        "list": 193,
+        "unanswerable": 70,
+        "date": 145,
+        "table": 19,
+        "boolean": 23
+      },
+      "questions_per_business": {
+        "biz_128": 118,
+        "biz_124": 118,
+        "biz_120": 118,
+        "biz_105": 119,
+        "biz_112": 118,
+        "biz_119": 118,
+        "biz_117": 118,
+        "biz_109": 118,
+        "biz_121": 118,
+        "biz_106": 119,
+        "biz_114": 40,
+        "biz_104": 119,
+        "biz_118": 118,
+        "biz_111": 118,
+        "biz_130": 118,
+        "biz_103": 119,
+        "biz_127": 118,
+        "biz_125": 40,
+        "biz_115": 118,
+        "biz_116": 118,
+        "biz_108": 119,
+        "biz_113": 40,
+        "biz_110": 40,
+        "biz_122": 118,
+        "biz_129": 118,
+        "biz_102": 119,
+        "biz_123": 118,
+        "biz_101": 40,
+        "biz_126": 40,
+        "biz_107": 40
+      },
+      "question_answer_ids_match": true,
+      "question_examples": [
+        {
+          "id": "q_001883280e83",
+          "business_id": "biz_128",
+          "question": "tháng này tổng giá trị các phiếu nhập hàng là bao nhiu",
+          "as_of_date": "2026-09-07"
+        },
+        {
+          "id": "q_00195e1e4049",
+          "business_id": "biz_124",
+          "question": "Thuốc có hoạt chất Natri clorid tháng này bán được tổng cộng bao nhiêu tiền?",
+          "as_of_date": "2026-05-25"
+        },
+        {
+          "id": "q_002d03ebbded",
+          "business_id": "biz_120",
+          "question": "Tổng doanh thu trong ngày hôm nay là bao nhiêu?",
+          "as_of_date": "2025-04-30"
+        },
+        {
+          "id": "q_00558c1410ef",
+          "business_id": "biz_105",
+          "question": "tỉ lệ huỷ đơn tháng 6/2025 là nhiêu %",
+          "as_of_date": "2026-06-24"
+        },
+        {
+          "id": "q_006c26c65d50",
+          "business_id": "biz_112",
+          "question": "thang 7/2026 co bao nhiu don co dthu tu 55.000 dong tro len",
+          "as_of_date": "2026-07-31"
+        },
+        {
+          "id": "q_0088f7a0afc5",
+          "business_id": "biz_119",
+          "question": "Tháng 7/2025 mặt hàng Otrivin 0,1% xịt mũi chai 10ml bán được tổng cộng bao nhiêu chai?",
+          "as_of_date": "2026-07-13"
+        },
+        {
+          "id": "q_008f69128180",
+          "business_id": "biz_117",
+          "question": "trong thang 10/2025, ti le don huy la bnhiu %",
+          "as_of_date": "2026-05-20"
+        },
+        {
+          "id": "q_00a6e23cbacf",
+          "business_id": "biz_109",
+          "question": "Trong tháng 1/2025, Mì Omachi sườn hầm nhập vào giá bình quân một thùng là bao nhiêu ạ?",
+          "as_of_date": "2026-08-05"
+        }
+      ],
+      "calendar": {
+        "columns": [
+          "date",
+          "weekday",
+          "lunar_day",
+          "lunar_month",
+          "lunar_year",
+          "lunar_leap",
+          "holiday"
+        ],
+        "rows": 1461,
+        "first": {
+          "date": "2024-01-01",
+          "weekday": "1",
+          "lunar_day": "20",
+          "lunar_month": "11",
+          "lunar_year": "2023",
+          "lunar_leap": "false",
+          "holiday": "Tết Dương lịch"
+        },
+        "last": {
+          "date": "2027-12-31",
+          "weekday": "5",
+          "lunar_day": "4",
+          "lunar_month": "12",
+          "lunar_year": "2027",
+          "lunar_leap": "false",
+          "holiday": ""
+        }
+      },
+      "alias_field_types": {
+        "list": 3000
+      },
+      "duplicate_answer_ids": 0
+    },
+    "public_test": {
+      "businesses": 14,
+      "questions": 1000,
+      "question_keys": [
+        "as_of_date",
+        "business_id",
+        "id",
+        "question"
+      ],
+      "file_formats": {
+        ".xlsx": 69,
+        ".csv": 10,
+        ".md": 14,
+        ".sqlite": 1
+      },
+      "data_bytes": 109129911,
+      "rulebook_sha256": "959ebb63b709fad68f7e8a339cde955c96b6e9af2e48141db3ad5a2429510e10",
+      "calendar": {
+        "columns": [
+          "date",
+          "weekday",
+          "lunar_day",
+          "lunar_month",
+          "lunar_year",
+          "lunar_leap",
+          "holiday"
+        ],
+        "rows": 1461,
+        "first": {
+          "date": "2024-01-01",
+          "weekday": "1",
+          "lunar_day": "20",
+          "lunar_month": "11",
+          "lunar_year": "2023",
+          "lunar_leap": "false",
+          "holiday": "Tết Dương lịch"
+        },
+        "last": {
+          "date": "2027-12-31",
+          "weekday": "5",
+          "lunar_day": "4",
+          "lunar_month": "12",
+          "lunar_year": "2027",
+          "lunar_leap": "false",
+          "holiday": ""
+        }
+      }
+    }
+  },
+  "readme_observations": {
+    "biz_101": {
+      "readme_lines": 99,
+      "files": [
+        ".Rhistory",
+        "README.md",
+        "ban_hang.csv"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 24/08/2026."
+      ]
+    },
+    "biz_102": {
+      "readme_lines": 30,
+      "files": [
+        "DanhSachQuyDoi.xlsx",
+        "DonHang_ChiTiet.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "File Excel xuất từ phần mềm bán hàng, mỗi danh sách một file (danh sách dài tách thành nhiều file, tên thêm đuôi _1, _2… hoặc đuôi năm _2025, _2026…). File đơn hàng mỗi dòng một sản phẩm, thông tin đơn lặp lại ở mọi dòng của đơn; file này không có mã sản phẩm, nối với các danh sách sản phẩm qua tên sản phẩm. Ngày dạng dd/mm/yyyy.",
+        "- Dữ liệu có đến hết 16/06/2026."
+      ]
+    },
+    "biz_103": {
+      "readme_lines": 30,
+      "files": [
+        "DanhSachQuyDoi.xlsx",
+        "DonHang_ChiTiet.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 09/07/2026."
+      ]
+    },
+    "biz_104": {
+      "readme_lines": 28,
+      "files": [
+        "DanhSachQuyDoi.xlsx",
+        "DonHang_ChiTiet.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "File Excel xuất từ phần mềm bán hàng, mỗi danh sách một file (danh sách dài tách thành nhiều file, tên thêm đuôi _1, _2… hoặc đuôi năm _2025, _2026…). File đơn hàng mỗi dòng một sản phẩm, thông tin đơn lặp lại ở mọi dòng của đơn; file này không có mã sản phẩm, nối với các danh sách sản phẩm qua tên sản phẩm. Ngày dạng dd/mm/yyyy.",
+        "- Dữ liệu có đến hết 02/06/2026."
+      ]
+    },
+    "biz_105": {
+      "readme_lines": 71,
+      "files": [
+        "BangGia.xlsx",
+        "DanhMuc.xlsx",
+        "README.md",
+        "SoBanHang_1.xlsx",
+        "SoBanHang_2026.xlsx",
+        "SoNhapHang.xlsx",
+        "TonKho.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 24/06/2026."
+      ]
+    },
+    "biz_106": {
+      "readme_lines": 23,
+      "files": [
+        "BaoCaoTonKho.xlsx",
+        "DanhSachChiTietNhapHang.xlsx",
+        "DanhSachDonViTinh.xlsx",
+        "DanhSachHoaDon.xlsx",
+        "DanhSachHoaDonChiTiet_1.xlsx",
+        "DanhSachHoaDonChiTiet_2.xlsx",
+        "DanhSachKhachHang.xlsx",
+        "DanhSachNhapHang.xlsx",
+        "DanhSachSanPham.xlsx",
+        "README.md",
+        "SoQuy.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 14/09/2026."
+      ]
+    },
+    "biz_107": {
+      "readme_lines": 97,
+      "files": [
+        "README.md",
+        "SoBanHang.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 22/07/2026."
+      ]
+    },
+    "biz_108": {
+      "readme_lines": 162,
+      "files": [
+        "BaoCaoTonKho.xlsx",
+        "DanhSachChiTietNhapHang.xlsx",
+        "DanhSachHoaDon.xlsx",
+        "DanhSachHoaDonChiTiet.xlsx",
+        "DanhSachKhachHang.xlsx",
+        "DanhSachNhapHang.xlsx",
+        "DanhSachSanPham.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "File Excel xuất từ phần mềm bán hàng, mỗi danh sách một file (danh sách dài tách thành nhiều file, tên thêm đuôi _1, _2… hoặc đuôi năm _2025, _2026…), nối với nhau qua mã. Ngày dạng dd/mm/yyyy.",
+        "- Dữ liệu có đến hết 29/05/2026.",
+        "- **Còn nợ**: **Còn nợ** là số khách còn nợ của đơn, tính đến hết ngày cuối dữ liệu."
+      ]
+    },
+    "biz_109": {
+      "readme_lines": 17,
+      "files": [
+        "DanhSachHoaDonChiTiet.xlsx",
+        "DuLieuBanHang.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 05/08/2026."
+      ]
+    },
+    "biz_110": {
+      "readme_lines": 20,
+      "files": [
+        "README.md",
+        "danh_sach_hoa_don.csv"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 03/07/2026.",
+        "- **Còn nợ**: **Chưa trả** là số khách còn nợ của đơn, tính đến hết ngày cuối dữ liệu."
+      ]
+    },
+    "biz_111": {
+      "readme_lines": 59,
+      "files": [
+        "README.md",
+        "chi_tiet_don.csv",
+        "don_hang.csv",
+        "khach_hang.csv",
+        "san_pham.csv",
+        "thanh_toan.csv"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 19/08/2026."
+      ]
+    },
+    "biz_112": {
+      "readme_lines": 46,
+      "files": [
+        "Danh sách hàng hóa.xlsx",
+        "README.md",
+        "So_chi_tiet_ban_hang_1.xlsx",
+        "So_chi_tiet_ban_hang_2026.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 31/07/2026."
+      ]
+    },
+    "biz_113": {
+      "readme_lines": 34,
+      "files": [
+        "README.md",
+        "SoBanHang.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 09/08/2026."
+      ]
+    },
+    "biz_114": {
+      "readme_lines": 35,
+      "files": [
+        "README.md",
+        "ban_hang.csv"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 21/06/2026."
+      ]
+    },
+    "biz_115": {
+      "readme_lines": 65,
+      "files": [
+        "Bảng kê phiếu giao hàng.xlsx",
+        "Chi tiết công nợ theo hạn.xlsx",
+        "Danh sách hàng hóa.xlsx",
+        "README.md",
+        "So_chi_tiet_ban_hang.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 16/05/2026."
+      ]
+    },
+    "biz_116": {
+      "readme_lines": 62,
+      "files": [
+        "Bao_cao_ban_hang.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 03/09/2026."
+      ]
+    },
+    "biz_117": {
+      "readme_lines": 77,
+      "files": [
+        "BangGia.xlsx",
+        "DanhMuc.xlsx",
+        "README.md",
+        "SoBanHang.xlsx",
+        "SoGiaoHang.xlsx",
+        "SoHanNo.xlsx",
+        "SoNhapHang.xlsx",
+        "TonKho.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 20/05/2026."
+      ]
+    },
+    "biz_118": {
+      "readme_lines": 64,
+      "files": [
+        "Bảng kê phiếu giao hàng.xlsx",
+        "Chi tiết công nợ theo hạn.xlsx",
+        "Danh sách hàng hóa.xlsx",
+        "README.md",
+        "So_chi_tiet_ban_hang.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 10/09/2026."
+      ]
+    },
+    "biz_119": {
+      "readme_lines": 183,
+      "files": [
+        "BaoCaoTonKho.xlsx",
+        "DanhSachChiTietNhapHang.xlsx",
+        "DanhSachHoaDon.xlsx",
+        "DanhSachHoaDonChiTiet.xlsx",
+        "DanhSachHoaDonChiTietLo.xlsx",
+        "DanhSachKhachHang.xlsx",
+        "DanhSachLoHang.xlsx",
+        "DanhSachNhapHang.xlsx",
+        "DanhSachSanPham.xlsx",
+        "DanhSachThuoc.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "File Excel xuất từ phần mềm bán hàng, mỗi danh sách một file (danh sách dài tách thành nhiều file, tên thêm đuôi _1, _2… hoặc đuôi năm _2025, _2026…), nối với nhau qua mã. Ngày dạng dd/mm/yyyy.",
+        "- Dữ liệu có đến hết 13/07/2026.",
+        "- **Còn nợ**: **Còn nợ** là số khách còn nợ của đơn, tính đến hết ngày cuối dữ liệu."
+      ]
+    },
+    "biz_120": {
+      "readme_lines": 191,
+      "files": [
+        "BaoCaoTonKho.xlsx",
+        "DanhSachChiTietNhapHang.xlsx",
+        "DanhSachHoaDon.xlsx",
+        "DanhSachHoaDonChiTiet.xlsx",
+        "DanhSachHoaDonChiTietLo.xlsx",
+        "DanhSachKhachHang.xlsx",
+        "DanhSachLoHang.xlsx",
+        "DanhSachNhapHang.xlsx",
+        "DanhSachSanPham.xlsx",
+        "DanhSachThuoc.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "File Excel xuất từ phần mềm bán hàng, mỗi danh sách một file (danh sách dài tách thành nhiều file, tên thêm đuôi _1, _2… hoặc đuôi năm _2025, _2026…), nối với nhau qua mã. Ngày dạng dd/mm/yyyy.",
+        "- Dữ liệu có đến hết 12/06/2026.",
+        "- **Còn nợ**: **Còn nợ** là số khách còn nợ của đơn, tính đến hết ngày cuối dữ liệu."
+      ]
+    },
+    "biz_121": {
+      "readme_lines": 61,
+      "files": [
+        "DonHang_ChiTiet.xlsx",
+        "DuLieuXuat.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 20/09/2026."
+      ]
+    },
+    "biz_122": {
+      "readme_lines": 85,
+      "files": [
+        "DanhSachQuyDoi.xlsx",
+        "DanhSachSanPham.xlsx",
+        "DanhSachThuoc.xlsx",
+        "DonHang_ChiTiet_1.xlsx",
+        "DonHang_ChiTiet_2026.xlsx",
+        "DonHang_Lo_1.xlsx",
+        "DonHang_Lo_2.xlsx",
+        "DonNhapHang.xlsx",
+        "DonNhapHang_ChiTiet.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 17/07/2026."
+      ]
+    },
+    "biz_123": {
+      "readme_lines": 24,
+      "files": [
+        "README.md",
+        "pos.sqlite"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 28/06/2026."
+      ]
+    },
+    "biz_124": {
+      "readme_lines": 30,
+      "files": [
+        "BanHang_BanTheoLo.xlsx",
+        "BanHang_ChiTietHoaDon.xlsx",
+        "BanHang_DonViQuyDoi.xlsx",
+        "BanHang_HangHoa.xlsx",
+        "BanHang_HoaDon.xlsx",
+        "BanHang_KhachHang.xlsx",
+        "BanHang_LichSuGia.xlsx",
+        "BanHang_LoHang.xlsx",
+        "BanHang_PhieuThu.xlsx",
+        "BanHang_Thuoc.xlsx",
+        "README.md",
+        "SoTay_ChiPhi.xlsx",
+        "SoTay_NhapHang.xlsx",
+        "ton_kho.csv"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 25/05/2026.",
+        "- **Công nợ**: mỗi lần khách trả tiền cho một đơn là một dòng, **Số tiền thu** là số tiền trả lần đó; **Tong tien** là số khách phải trả cho cả đơn; **Còn nợ** là số tiền của đơn chưa thu, tính đến hết ngày cuối dữ liệu."
+      ]
+    },
+    "biz_125": {
+      "readme_lines": 31,
+      "files": [
+        "README.md",
+        "ban_hang.csv"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 11/05/2026."
+      ]
+    },
+    "biz_126": {
+      "readme_lines": 29,
+      "files": [
+        "README.md",
+        "SoBanHang.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 06/06/2026."
+      ]
+    },
+    "biz_127": {
+      "readme_lines": 65,
+      "files": [
+        "README.md",
+        "chi_tiet_don.csv",
+        "don_hang.csv",
+        "khach_hang.csv",
+        "san_pham.csv",
+        "thanh_toan.csv"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 28/07/2026."
+      ]
+    },
+    "biz_128": {
+      "readme_lines": 100,
+      "files": [
+        "BaoCaoTonKho.xlsx",
+        "DanhSachChiTietNhapHang.xlsx",
+        "DanhSachHoaDon.xlsx",
+        "DanhSachHoaDonChiTiet.xlsx",
+        "DanhSachHoaDonPhongBan.xlsx",
+        "DanhSachKhachHang.xlsx",
+        "DanhSachNhapHang.xlsx",
+        "DanhSachSanPham.xlsx",
+        "README.md"
+      ],
+      "coverage_lines": [
+        "File Excel xuất từ phần mềm bán hàng, mỗi danh sách một file (danh sách dài tách thành nhiều file, tên thêm đuôi _1, _2… hoặc đuôi năm _2025, _2026…), nối với nhau qua mã. Ngày dạng dd/mm/yyyy.",
+        "- Dữ liệu có đến hết 07/09/2026.",
+        "- **Còn nợ**: **Còn nợ** là số khách còn nợ của đơn, tính đến hết ngày cuối dữ liệu."
+      ]
+    },
+    "biz_129": {
+      "readme_lines": 65,
+      "files": [
+        "README.md",
+        "chi_tiet_don.csv",
+        "don_hang.csv",
+        "khach_hang.csv",
+        "san_pham.csv",
+        "thanh_toan.csv"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 14/08/2026."
+      ]
+    },
+    "biz_130": {
+      "readme_lines": 50,
+      "files": [
+        "Danh sách hàng hóa.xlsx",
+        "README.md",
+        "So_chi_tiet_ban_hang_1.xlsx",
+        "So_chi_tiet_ban_hang_2.xlsx"
+      ],
+      "coverage_lines": [
+        "- Dữ liệu có đến hết 29/08/2026."
+      ]
+    }
+  },
+  "representative_structures": [
+    {
+      "file": "biz_102/DonHang_ChiTiet.xlsx",
+      "sheets": [
+        {
+          "name": "T01_2025",
+          "sheetId": "1",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId1"
+        },
+        {
+          "name": "T02_2025",
+          "sheetId": "2",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId2"
+        },
+        {
+          "name": "T03_2025",
+          "sheetId": "3",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId3"
+        },
+        {
+          "name": "T04_2025",
+          "sheetId": "4",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId4"
+        },
+        {
+          "name": "T05_2025",
+          "sheetId": "5",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId5"
+        },
+        {
+          "name": "T06_2025",
+          "sheetId": "6",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId6"
+        },
+        {
+          "name": "T07_2025",
+          "sheetId": "7",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId7"
+        },
+        {
+          "name": "T08_2025",
+          "sheetId": "8",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId8"
+        },
+        {
+          "name": "T09_2025",
+          "sheetId": "9",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId9"
+        },
+        {
+          "name": "T10_2025",
+          "sheetId": "10",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId10"
+        },
+        {
+          "name": "T11_2025",
+          "sheetId": "11",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId11"
+        },
+        {
+          "name": "T12_2025",
+          "sheetId": "12",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId12"
+        },
+        {
+          "name": "T01_2026",
+          "sheetId": "13",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId13"
+        },
+        {
+          "name": "T02_2026",
+          "sheetId": "14",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId14"
+        },
+        {
+          "name": "T03_2026",
+          "sheetId": "15",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId15"
+        },
+        {
+          "name": "T04_2026",
+          "sheetId": "16",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId16"
+        },
+        {
+          "name": "T05_2026",
+          "sheetId": "17",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId17"
+        },
+        {
+          "name": "T06_2026",
+          "sheetId": "18",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId18"
+        }
+      ],
+      "merged_ranges": [],
+      "formula_cells": 0,
+      "header_rows_by_cell_coordinate": [
+        {
+          "A1": "Mã đơn hàng",
+          "B1": "Ngày đặt hàng",
+          "C1": "Trạng thái đơn hàng",
+          "D1": "Tên khách hàng",
+          "E1": "Tên sản phẩm",
+          "F1": "Số lượng sản phẩm",
+          "G1": "Giá sản phẩm",
+          "H1": "Tổng tiền",
+          "I1": "Đơn vị tính"
+        }
+      ]
+    },
+    {
+      "file": "biz_106/DanhSachHoaDon.xlsx",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "sheetId": "1",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId1"
+        }
+      ],
+      "merged_ranges": [],
+      "formula_cells": 0,
+      "header_rows_by_cell_coordinate": [
+        {
+          "A1": "DANH SÁCH HÓA ĐƠN"
+        },
+        {},
+        {
+          "A3": "Mã hóa đơn",
+          "B3": "Thời gian",
+          "C3": "Mã KH",
+          "D3": "Khách hàng",
+          "E3": "Tổng tiền hàng",
+          "F3": "Giảm giá",
+          "G3": "Tổng sau giảm giá",
+          "H3": "Khách đã trả",
+          "I3": "Phương thức thanh toán",
+          "J3": "Trạng thái",
+          "K3": "Thời gian tạo",
+          "L3": "Ghi chú"
+        }
+      ]
+    },
+    {
+      "file": "biz_106/DanhSachHoaDonChiTiet_1.xlsx",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "sheetId": "1",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId1"
+        }
+      ],
+      "merged_ranges": [],
+      "formula_cells": 0,
+      "header_rows_by_cell_coordinate": [
+        {
+          "A1": "DANH SÁCH CHI TIẾT HÓA ĐƠN"
+        },
+        {},
+        {
+          "A3": "Mã hóa đơn",
+          "B3": "STT",
+          "C3": "Mã hàng",
+          "D3": "Tên hàng",
+          "E3": "Đơn vị tính",
+          "F3": "Số lượng",
+          "G3": "Đơn giá",
+          "H3": "Giảm giá",
+          "I3": "Thành tiền",
+          "J3": "Số lượng quy đổi",
+          "K3": "Giá vốn"
+        }
+      ]
+    },
+    {
+      "file": "biz_117/SoBanHang.xlsx",
+      "sheets": [
+        {
+          "name": "Tháng 01-2025",
+          "sheetId": "1",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId1"
+        },
+        {
+          "name": "Tháng 02-2025",
+          "sheetId": "2",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId2"
+        },
+        {
+          "name": "Tháng 03-2025",
+          "sheetId": "3",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId3"
+        },
+        {
+          "name": "Tháng 04-2025",
+          "sheetId": "4",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId4"
+        },
+        {
+          "name": "Tháng 05-2025",
+          "sheetId": "5",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId5"
+        },
+        {
+          "name": "Tháng 06-2025",
+          "sheetId": "6",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId6"
+        },
+        {
+          "name": "Tháng 07-2025",
+          "sheetId": "7",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId7"
+        },
+        {
+          "name": "Tháng 08-2025",
+          "sheetId": "8",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId8"
+        },
+        {
+          "name": "Tháng 09-2025",
+          "sheetId": "9",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId9"
+        },
+        {
+          "name": "Tháng 10-2025",
+          "sheetId": "10",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId10"
+        },
+        {
+          "name": "Tháng 11-2025",
+          "sheetId": "11",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId11"
+        },
+        {
+          "name": "Tháng 12-2025",
+          "sheetId": "12",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId12"
+        },
+        {
+          "name": "Tháng 01-2026",
+          "sheetId": "13",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId13"
+        },
+        {
+          "name": "Tháng 02-2026",
+          "sheetId": "14",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId14"
+        },
+        {
+          "name": "Tháng 03-2026",
+          "sheetId": "15",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId15"
+        },
+        {
+          "name": "Tháng 04-2026",
+          "sheetId": "16",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId16"
+        },
+        {
+          "name": "Tháng 05-2026",
+          "sheetId": "17",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId17"
+        }
+      ],
+      "merged_ranges": [],
+      "formula_cells": 0,
+      "header_rows_by_cell_coordinate": [
+        {
+          "A1": "Đơn",
+          "E1": "Tiền",
+          "H1": "Hàng"
+        },
+        {
+          "A2": "Giờ",
+          "B2": "Mã phiếu",
+          "C2": "TenKH",
+          "D2": "Ngày lập",
+          "E2": "Tiền",
+          "F2": "Ghi chú TT",
+          "G2": "Giá",
+          "H2": "DonVi",
+          "I2": "Số lượng hàng",
+          "J2": "Tên SP"
+        }
+      ]
+    },
+    {
+      "file": "biz_119/DanhSachLoHang.xlsx",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "sheetId": "1",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId1"
+        }
+      ],
+      "merged_ranges": [],
+      "formula_cells": 0,
+      "header_rows_by_cell_coordinate": [
+        {
+          "A1": "Mã nhập hàng",
+          "B1": "Mã hàng",
+          "C1": "Lô",
+          "D1": "Hạn sử dụng",
+          "E1": "Số lượng (ĐVT cơ bản)"
+        }
+      ]
+    },
+    {
+      "file": "biz_124/BanHang_HangHoa.xlsx",
+      "sheets": [
+        {
+          "name": "Sheet1",
+          "sheetId": "1",
+          "state": "visible",
+          "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id": "rId1"
+        }
+      ],
+      "merged_ranges": [],
+      "formula_cells": 0,
+      "header_rows_by_cell_coordinate": [
+        {
+          "A1": "Định mức tồn tối thiểu",
+          "B1": "Giá vốn hiện tại",
+          "C1": "Thương hiệu",
+          "D1": "Thuộc tính",
+          "E1": "Phân loại",
+          "F1": "Món",
+          "G1": "Được bán trực tiếp",
+          "H1": "Mã HH Liên quan",
+          "I1": "ma_sp",
+          "J1": "Mô tả sản phẩm",
+          "K1": "Mẫu ghi chú",
+          "L1": "Giá",
+          "M1": "Ghi chú",
+          "N1": "Đơn vị",
+          "O1": "Trọng lượng",
+          "P1": "Loại hàng hóa"
+        }
+      ]
+    }
+  ],
+  "sqlite_schema": [
+    {
+      "name": "chi_nhanh",
+      "sql": "CREATE TABLE \"chi_nhanh\" (\"IDCuaHang\" TEXT, \"MaChiNhanh\" TEXT, \"TenGoi\" TEXT, \"DiaChiLienHe\" TEXT, \"NgayKhaiTruong\" TEXT)"
+    },
+    {
+      "name": "chi_tiet_don",
+      "sql": "CREATE TABLE \"chi_tiet_don\" (\"IDCuaHang\" TEXT, \"MaHoaDon\" TEXT, \"SoThuTu\" INTEGER, \"MaHangHoa\" TEXT, \"DonViTinh\" TEXT, \"SL\" INTEGER, \"SLQuyDoi\" INTEGER, \"GiaDonVi\" INTEGER, \"ChietKhau\" INTEGER, \"TriGia\" INTEGER, \"GiaVonLucBan\" INTEGER)"
+    },
+    {
+      "name": "chi_tiet_don_lo",
+      "sql": "CREATE TABLE \"chi_tiet_don_lo\" (\"IDCuaHang\" TEXT, \"MaHoaDon\" TEXT, \"SoThuTu\" INTEGER, \"MaLo\" TEXT, \"SLQuyDoi\" INTEGER, \"SLTraQuyDoi\" INTEGER)"
+    },
+    {
+      "name": "chi_tiet_nhap",
+      "sql": "CREATE TABLE \"chi_tiet_nhap\" (\"IDCuaHang\" TEXT, \"MaPhieuNhap\" TEXT, \"SoThuTu\" INTEGER, \"MaHangHoa\" TEXT, \"DonViTinh\" TEXT, \"SL\" INTEGER, \"DonGiaNhap\" INTEGER, \"MaLo\" TEXT, \"HanSuDung\" TEXT)"
+    },
+    {
+      "name": "don_hang",
+      "sql": "CREATE TABLE \"don_hang\" (\"IDCuaHang\" TEXT, \"MaHoaDon\" TEXT, \"MaChiNhanh\" TEXT, \"MaKhachHang\" TEXT, \"MaNhanVien\" TEXT, \"MaCaLam\" TEXT, \"KenhBanHang\" TEXT, \"ThoiGianLap\" TEXT, \"NgayLap\" TEXT, \"TinhTrang\" TEXT, \"TongTienHang\" INTEGER, \"ChietKhau\" INTEGER, \"PhiVanChuyen\" INTEGER, \"ThueGTGT\" INTEGER, \"TongThanhToan\" INTEGER, \"KhachDaTra\" INTEGER, \"ConPhaiThu\" INTEGER, \"PhuongThucTT\" TEXT, \"SoHoaDonDienTu\" TEXT, \"TinhTrangHDDT\" TEXT, \"MaKhuyenMai\" TEXT, \"DienGiai\" TEXT)"
+    },
+    {
+      "name": "don_vi_sp",
+      "sql": "CREATE TABLE \"don_vi_sp\" (\"IDCuaHang\" TEXT, \"MaHangHoa\" TEXT, \"DonViTinh\" TEXT, \"HeSoQuyDoi\" INTEGER, \"GiaDonVi\" INTEGER)"
+    },
+    {
+      "name": "khach_hang",
+      "sql": "CREATE TABLE \"khach_hang\" (\"trang_thai_kh\" TEXT, \"cccd\" TEXT, \"IDCuaHang\" TEXT, \"diem_hien_tai\" TEXT, \"MaKhachHang\" TEXT, \"ghi_chu_kh\" TEXT, \"ngay_sinh\" TEXT, \"email\" TEXT, \"TenGoi\" TEXT, \"SoDienThoai\" TEXT, \"NamNu\" TEXT, \"nguoi_tao\" TEXT, \"LoaiKhachHang\" TEXT, \"cong_ty\" TEXT, \"tong_diem\" TEXT, \"TaoLuc\" TEXT, \"loai_hinh_kh\" TEXT, \"DiaChiLienHe\" TEXT)"
+    },
+    {
+      "name": "lich_su_gia",
+      "sql": "CREATE TABLE \"lich_su_gia\" (\"IDCuaHang\" TEXT, \"MaHangHoa\" TEXT, \"NgayApDung\" TEXT, \"GiaBanLe\" INTEGER)"
+    },
+    {
+      "name": "lo_hang",
+      "sql": "CREATE TABLE \"lo_hang\" (\"IDCuaHang\" TEXT, \"MaHangHoa\" TEXT, \"MaLo\" TEXT, \"MaPhieuNhap\" TEXT, \"HanSuDung\" TEXT, \"SLNhapQuyDoi\" INTEGER, \"DonGiaNhap\" INTEGER)"
+    },
+    {
+      "name": "nha_cung_cap",
+      "sql": "CREATE TABLE \"nha_cung_cap\" (\"IDCuaHang\" TEXT, \"MaNhaCungCap\" TEXT, \"TenGoi\" TEXT, \"SoDienThoai\" TEXT, \"DiaChiLienHe\" TEXT)"
+    },
+    {
+      "name": "nhan_vien",
+      "sql": "CREATE TABLE \"nhan_vien\" (\"IDCuaHang\" TEXT, \"MaNhanVien\" TEXT, \"TenGoi\" TEXT, \"MaChiNhanh\" TEXT, \"ChucVu\" TEXT, \"NgayNhanViec\" TEXT, \"NgayThoiViec\" TEXT)"
+    },
+    {
+      "name": "phieu_nhap",
+      "sql": "CREATE TABLE \"phieu_nhap\" (\"IDCuaHang\" TEXT, \"MaPhieuNhap\" TEXT, \"MaNhaCungCap\" TEXT, \"MaChiNhanh\" TEXT, \"NgayNhapKho\" TEXT, \"TinhTrang\" TEXT, \"TongGiaTriNhap\" INTEGER, \"DienGiai\" TEXT)"
+    },
+    {
+      "name": "san_pham",
+      "sql": "CREATE TABLE \"san_pham\" (\"hinh_anh\" TEXT, \"ma_vach_ean\" TEXT, \"bao_hanh\" TEXT, \"ban_truc_tiep\" TEXT, \"IDCuaHang\" TEXT, \"MaHangHoa\" TEXT, \"ghi_chu_hh\" TEXT, \"vi_tri\" TEXT, \"TenGoi\" TEXT, \"DanhMuc\" TEXT, \"loai_hang_hoa\" TEXT, \"ton_nho_nhat\" TEXT, \"thuong_hieu\" TEXT, \"DonViCoSo\" TEXT, \"GiaBanLe\" INTEGER, \"GiaVonHang\" INTEGER, \"mau_ghi_chu\" TEXT, \"mo_ta\" TEXT, \"TyLeThue\" INTEGER, \"ConKinhDoanh\" INTEGER, \"TaoLuc\" TEXT, \"ton_lon_nhat\" TEXT)"
+    },
+    {
+      "name": "thanh_toan",
+      "sql": "CREATE TABLE \"thanh_toan\" (\"IDCuaHang\" TEXT, \"MaPhieuThu\" TEXT, \"MaHoaDon\" TEXT, \"NgayGioThu\" TEXT, \"SoTienThu\" INTEGER, \"PhuongThuc\" TEXT, \"DienGiai\" TEXT)"
+    },
+    {
+      "name": "the_kho",
+      "sql": "CREATE TABLE \"the_kho\" (\"IDCuaHang\" TEXT, \"MaGiaoDichKho\" TEXT, \"MaHangHoa\" TEXT, \"MaChiNhanh\" TEXT, \"NgayGioPhatSinh\" TEXT, \"LoaiGiaoDich\" TEXT, \"SLQuyDoi\" INTEGER, \"KieuChungTu\" TEXT, \"MaChungTu\" TEXT, \"TonCuoi\" INTEGER)"
+    },
+    {
+      "name": "thong_tin_thuoc",
+      "sql": "CREATE TABLE \"thong_tin_thuoc\" (\"IDCuaHang\" TEXT, \"MaHangHoa\" TEXT, \"ThanhPhanChinh\" TEXT, \"BanTheoDon\" INTEGER)"
+    },
+    {
+      "name": "tra_hang",
+      "sql": "CREATE TABLE \"tra_hang\" (\"IDCuaHang\" TEXT, \"MaPhieuTra\" TEXT, \"MaHoaDon\" TEXT, \"NgayGioTra\" TEXT, \"NguyenNhan\" TEXT, \"TienHoanTra\" INTEGER, \"CachHoanTien\" TEXT)"
+    }
+  ],
+  "csv_header_example": [
+    "Giá bán",
+    "Kết quả",
+    "Nội dung",
+    "Ngày tháng",
+    "Đơn vị (tính)",
+    "so_luong",
+    "Thanh tien",
+    "Quy ra ĐV lẻ",
+    "Mã hóa đơn",
+    "Đối tác"
+  ],
+  "unknown_extension_files": [
+    "data/biz_101/.Rhistory"
+  ],
+  "limitations": [
+    "Inventory is not a full data-quality audit or ingestion pipeline.",
+    "Only representative Excel layouts inspected; formula_cells refers to first sampled sheet, not all workbooks.",
+    "Public test inspected structurally; no answers inferred, labels created, or training samples generated."
+  ],
+  "rulebook_comparison": {
+    "identical": false,
+    "semantic_differences_observed": true,
+    "examples": [
+      "public adds loyalty/ranking definitions",
+      "public adds mother-and-baby, repair shop, phone shop rules",
+      "public clarifies cash shift reports and returned-order cutoff",
+      "public adds status-from-notes default"
+    ],
+    "runtime_implication": "Load rulebook for the current split; do not reuse train rulebook unconditionally.",
+    "training_boundary": "Public inputs were not used to create labels or training examples."
+  }
+}

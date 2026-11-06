@@ -1,0 +1,15 @@
+{
+  "pipeline_version": "postgres-pipeline-v2-semantic",
+  "semantic_mode": "local",
+  "semantic_model_path": "models/qwen3-4b",
+  "semantic_cache": ".cache/datamate_semantics",
+  "sql_dialect": "postgres",
+  "storage": "PostgreSQL",
+  "source_root": "docs/train",
+  "split_root": "artifacts/data_split_v1",
+  "development_cluster": ".cache/postgresql",
+  "dsn_environment_variable": "DATAMATE_PG_DSN",
+  "csv_encoding": "utf-8-sig",
+  "model_sql_execution_enabled": false,
+  "note": "Deployment configuration reference; credentials are never stored here. CLI arguments are explicit."
+}

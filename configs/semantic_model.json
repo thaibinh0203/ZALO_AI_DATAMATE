@@ -1,0 +1,18 @@
+{
+  "repo_id": "Qwen/Qwen3-4B",
+  "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+  "local_path": "models/qwen3-4b",
+  "device": "cuda:0",
+  "dtype": "bfloat16",
+  "max_context_tokens": 16384,
+  "max_new_tokens": 2048,
+  "seed": 42,
+  "enable_thinking": false,
+  "do_sample": false,
+  "target_columns_per_call": 5,
+  "json_parse_retries": 1,
+  "rule_context": "up to four whole paragraphs, <=5000 characters, selected by source column terms",
+  "apply_policy": "literal source evidence + full-column parse checks; preserve existing mappings on conflict",
+  "semantic_claim": "source-grounded candidates, not business proof",
+  "note": "Reference config matching CLI defaults; not an additional model or a fine-tuned checkpoint."
+}

@@ -1,0 +1,48 @@
+.venv*/
+__pycache__/
+*.py[cod]
+.cache/
+models/
+outputs/
+*.safetensors
+*.bin
+*.gguf
+
+# Local credentials and tool state
+.env
+.env.*
+!.env.example
+.aws/
+.codex/
+.agents/
+.ssh/
+*.pem
+*.key
+
+# OS/editor/session artifacts
+*:Zone.Identifier
+.Rhistory
+.DS_Store
+.idea/
+.vscode/
+
+# Local publish archives
+*.bundle
+.git-publish/
+
+# Large source datasets; retain the business documentation
+/docs/*.zip
+/docs/train/data/**
+!/docs/train/data/**/
+!/docs/train/data/**/README.md
+!/docs/train/data/**/README.html
+/docs/public_test/data/**
+!/docs/public_test/data/**/
+!/docs/public_test/data/**/README.md
+!/docs/public_test/data/**/README.html
+/docs/train/*.jsonl
+/docs/public_test/*.jsonl
+/docs/train/calendar.csv
+/docs/public_test/calendar.csv
+/artifacts/data_split_v1/inputs/
+/artifacts/data_split_v1/evaluator/

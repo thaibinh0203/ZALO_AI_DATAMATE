@@ -1,0 +1,364 @@
+{
+  "scope": "B1 tooling only; no SQL execution",
+  "environment_in_sandbox": {
+    "recorded_at_utc": "2026-11-05T11:55:25.730724+00:00",
+    "cwd": "/home/pc/projects/datamate",
+    "os": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "wsl": true,
+    "python": "3.12.13 (main, Jun 23 2026, 15:18:55) [Clang 22.1.3 ]",
+    "executable": "/home/pc/projects/datamate/.venv-b1/bin/python",
+    "venv": true,
+    "versions": {
+      "torch": "2.7.1+cpu",
+      "transformers": "4.51.3",
+      "accelerate": "1.6.0",
+      "huggingface-hub": "0.30.2",
+      "sqlglot": "26.16.4"
+    },
+    "memory": {
+      "MemTotal_bytes": 10429370368,
+      "MemAvailable_bytes": 7929237504,
+      "SwapTotal_bytes": 17179869184,
+      "SwapFree_bytes": 17179869184
+    },
+    "disk": {
+      "total": 1081101176832,
+      "used": 22445514752,
+      "free": 1003663306752
+    },
+    "dxg_exists": false,
+    "nvidia_smi": {
+      "returncode": 255,
+      "stdout": "Failed to initialize NVML: GPU access blocked by the operating system\nFailed to properly shut down NVML: GPU access blocked by the operating system",
+      "stderr": ""
+    },
+    "git": {
+      "returncode": 128,
+      "stdout": "",
+      "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+    },
+    "cuda_visible_devices": null,
+    "cuda": {
+      "torch_version": "2.7.1+cpu",
+      "compiled_cuda": null,
+      "available": false,
+      "device_count": 0,
+      "devices": []
+    }
+  },
+  "environment_outside_sandbox_cpu_build": {
+    "recorded_at_utc": "2026-11-05T12:01:01.642830+00:00",
+    "cwd": "/home/pc/projects/datamate",
+    "os": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "wsl": true,
+    "python": "3.12.13 (main, Jun 23 2026, 15:18:55) [Clang 22.1.3 ]",
+    "executable": "/home/pc/projects/datamate/.venv-b1/bin/python",
+    "venv": true,
+    "versions": {
+      "torch": "2.7.1+cpu",
+      "transformers": "4.51.3",
+      "accelerate": "1.6.0",
+      "huggingface-hub": "0.30.2",
+      "sqlglot": "26.16.4"
+    },
+    "memory": {
+      "MemTotal_bytes": 10429370368,
+      "MemAvailable_bytes": 7781670912,
+      "SwapTotal_bytes": 17179869184,
+      "SwapFree_bytes": 17179869184
+    },
+    "disk": {
+      "total": 1081101176832,
+      "used": 22468255744,
+      "free": 1003640565760
+    },
+    "dxg_exists": true,
+    "nvidia_smi": {
+      "returncode": 0,
+      "stdout": "name, memory.total [MiB], memory.free [MiB], driver_version\nNVIDIA GeForce RTX 4080 SUPER, 16376 MiB, 14547 MiB, 610.88",
+      "stderr": ""
+    },
+    "git": {
+      "returncode": 128,
+      "stdout": "",
+      "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+    },
+    "cuda_visible_devices": null,
+    "cuda": {
+      "torch_version": "2.7.1+cpu",
+      "compiled_cuda": null,
+      "available": false,
+      "device_count": 0,
+      "devices": []
+    }
+  },
+  "checks": {
+    "unit_and_optional_stack_tests": {
+      "status": "passed",
+      "count": 13,
+      "evidence": "outputs/b1/gpu-tests-final.txt",
+      "note": "Real tokenizer + random tiny test weights; separate from real Qwen3-4B inference."
+    },
+    "compileall": {
+      "status": "passed"
+    },
+    "cpu_dependency_check": {
+      "status": "passed"
+    },
+    "metadata_download": {
+      "status": "passed",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c"
+    },
+    "metadata_only_cli_refusal": {
+      "status": "passed",
+      "exit_code": 2,
+      "evidence": "outputs/b1/smoke.jsonl.run.json"
+    },
+    "gpu_dependencies": {
+      "status": "passed",
+      "torch": "2.7.1+cu128",
+      "cuda": "12.8",
+      "uv_pip_check": "passed",
+      "freeze": "configs/b1-gpu-environment.freeze.txt"
+    },
+    "full_weights_download": {
+      "status": "passed",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "weights_shards": 3,
+      "weight_bytes_from_index": 8044936192,
+      "manifest": "docs/B1_MODEL_MANIFEST.json"
+    },
+    "qwen3_4b_inference": {
+      "status": "completed_with_contract_failure",
+      "sql_executed": false
+    },
+    "sql_execution": {
+      "status": "not_run",
+      "reason": "Out of B1 scope"
+    },
+    "gpu_tensor_test": {
+      "status": "passed",
+      "cuda_available": true,
+      "gpu": "RTX 4080 SUPER"
+    }
+  },
+  "limitations": [
+    "No competition data/rulebook/calendar supplied",
+    "No full competition evaluator or PA score",
+    "AST validation is not proof of SQL semantics",
+    "Relative calendar week query still fails with selected Qwen3-4B greedy/non-thinking baseline.",
+    "Valid JSON/AST can still contain wrong business logic or function signatures; v2 profit output demonstrated this.",
+    "GPU network isolation was not tested in Docker/network namespace; offline local loading flags used; socket denial tested with tiny stack test.",
+    "RTX 5090, full competition runtime, PA and answer values not verified."
+  ],
+  "environment_notes": [
+    "GPU inaccessible only inside sandbox; outside sandbox RTX 4080 SUPER 16376 MiB is accessible",
+    "Temporary filesystem is separate 4.9 GiB tmpfs; initial CUDA cache exhausted it. Cache moved to workspace .cache/uv before retry."
+  ],
+  "environment_gpu": {
+    "recorded_at_utc": "2026-11-05T12:33:13.756348+00:00",
+    "cwd": "/home/pc/projects/datamate",
+    "os": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "wsl": true,
+    "python": "3.12.13 (main, Jun 23 2026, 15:18:55) [Clang 22.1.3 ]",
+    "executable": "/home/pc/projects/datamate/.venv-b1-gpu/bin/python",
+    "venv": true,
+    "versions": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.51.3",
+      "accelerate": "1.6.0",
+      "huggingface-hub": "0.30.2",
+      "sqlglot": "26.16.4"
+    },
+    "memory": {
+      "MemTotal_bytes": 10429370368,
+      "MemAvailable_bytes": 8720740352,
+      "SwapTotal_bytes": 17179869184,
+      "SwapFree_bytes": 17177772032
+    },
+    "disk": {
+      "total": 1081101176832,
+      "used": 42168848384,
+      "free": 983939973120
+    },
+    "temporary_path": "/tmp",
+    "temporary_disk": {
+      "total": 5214687232,
+      "used": 372736,
+      "free": 5214314496
+    },
+    "dxg_exists": true,
+    "nvidia_smi": {
+      "returncode": 0,
+      "stdout": "name, memory.total [MiB], memory.free [MiB], driver_version\nNVIDIA GeForce RTX 4080 SUPER, 16376 MiB, 14418 MiB, 610.88",
+      "stderr": ""
+    },
+    "git": {
+      "returncode": 128,
+      "stdout": "",
+      "stderr": "fatal: not a git repository (or any of the parent directories): .git"
+    },
+    "cuda_visible_devices": null,
+    "cuda": {
+      "torch_version": "2.7.1+cu128",
+      "compiled_cuda": "12.8",
+      "available": true,
+      "device_count": 1,
+      "devices": [
+        {
+          "name": "NVIDIA GeForce RTX 4080 SUPER",
+          "vram_bytes": 17170956288
+        }
+      ],
+      "tensor_check": true
+    }
+  },
+  "smoke_runs": [
+    {
+      "load_ms": 9743.765,
+      "total_ms": 23210.809,
+      "inference_completed": true,
+      "failures": 1,
+      "prompt_version": "b1-v1",
+      "output": "outputs/b1/gpu-smoke.jsonl",
+      "run_log": "outputs/b1/gpu-smoke.jsonl.run.json",
+      "strict_json_count": 3,
+      "contract_pass_count": 2,
+      "question_count": 3,
+      "peak_torch_cuda_allocated_bytes": 8223304704,
+      "peak_torch_cuda_reserved_bytes": 8829009920,
+      "note": "Torch allocator statistics, not total process/device VRAM; no SQL execution or competition score.",
+      "cases": [
+        {
+          "id": "synthetic_revenue",
+          "valid": true,
+          "parse_error": null,
+          "contract_error": null,
+          "generation_error": null,
+          "generation_ms": 2594.278,
+          "prompt_tokens": 649,
+          "output_tokens": 55
+        },
+        {
+          "id": "synthetic_top_product",
+          "valid": false,
+          "parse_error": "ValueError: Disallowed SQL construct: currentdate",
+          "contract_error": null,
+          "generation_error": null,
+          "generation_ms": 6678.004,
+          "prompt_tokens": 629,
+          "output_tokens": 183
+        },
+        {
+          "id": "synthetic_profit",
+          "valid": true,
+          "parse_error": null,
+          "contract_error": null,
+          "generation_error": null,
+          "generation_ms": 1781.995,
+          "prompt_tokens": 629,
+          "output_tokens": 43
+        }
+      ]
+    },
+    {
+      "load_ms": 8816.403,
+      "total_ms": 23883.354,
+      "inference_completed": true,
+      "failures": 1,
+      "prompt_version": "b1-v2",
+      "output": "outputs/b1/gpu-smoke-v2.jsonl",
+      "run_log": "outputs/b1/gpu-smoke-v2.jsonl.run.json",
+      "strict_json_count": 3,
+      "contract_pass_count": 2,
+      "question_count": 3,
+      "peak_torch_cuda_allocated_bytes": 8263862272,
+      "peak_torch_cuda_reserved_bytes": 8829009920,
+      "note": "Torch allocator statistics, not total process/device VRAM; no SQL execution or competition score.",
+      "cases": [
+        {
+          "id": "synthetic_revenue",
+          "valid": true,
+          "parse_error": null,
+          "contract_error": null,
+          "generation_error": null,
+          "generation_ms": 3088.584,
+          "prompt_tokens": 804,
+          "output_tokens": 55
+        },
+        {
+          "id": "synthetic_top_product",
+          "valid": false,
+          "parse_error": null,
+          "contract_error": "OptimizeError: Column '\"week_start\".\"week_start\"' could not be resolved for table: 'week_start'",
+          "generation_error": null,
+          "generation_ms": 6654.104,
+          "prompt_tokens": 784,
+          "output_tokens": 164
+        },
+        {
+          "id": "synthetic_profit",
+          "valid": true,
+          "parse_error": null,
+          "contract_error": null,
+          "generation_error": null,
+          "generation_ms": 3786.26,
+          "prompt_tokens": 784,
+          "output_tokens": 84
+        }
+      ],
+      "manual_review_note": "Profit query incorrectly substitutes revenue for profit despite passing JSON/AST; v2 not kept as default."
+    },
+    {
+      "load_ms": 8532.914,
+      "total_ms": 23245.113,
+      "inference_completed": true,
+      "failures": 1,
+      "prompt_version": "b1-v3",
+      "output": "outputs/b1/gpu-smoke-v3.jsonl",
+      "run_log": "outputs/b1/gpu-smoke-v3.jsonl.run.json",
+      "strict_json_count": 3,
+      "contract_pass_count": 2,
+      "question_count": 3,
+      "peak_torch_cuda_allocated_bytes": 8240051712,
+      "peak_torch_cuda_reserved_bytes": 8829009920,
+      "note": "Torch allocator statistics, not total process/device VRAM; no SQL execution or competition score.",
+      "cases": [
+        {
+          "id": "synthetic_revenue",
+          "valid": true,
+          "parse_error": null,
+          "contract_error": null,
+          "generation_error": null,
+          "generation_ms": 3122.295,
+          "prompt_tokens": 713,
+          "output_tokens": 64,
+          "manual_review": "Plan inspection: SUM(amount_vnd), requested date and completed status. Not executed."
+        },
+        {
+          "id": "synthetic_top_product",
+          "valid": false,
+          "parse_error": null,
+          "contract_error": "ValueError: Unsupported/unknown function: DATE_SUB",
+          "generation_error": null,
+          "generation_ms": 5891.248,
+          "prompt_tokens": 693,
+          "output_tokens": 151,
+          "manual_review": "Rejected: DATE_SUB unsupported by B1 DuckDB policy. Also uses rolling 7 days instead of prior calendar week and groups by sale_date instead of whole-period product quantity."
+        },
+        {
+          "id": "synthetic_profit",
+          "valid": true,
+          "parse_error": null,
+          "contract_error": null,
+          "generation_error": null,
+          "generation_ms": 3271.02,
+          "prompt_tokens": 693,
+          "output_tokens": 79,
+          "manual_review": "Plan inspection: unanswerable, explicitly identifies absent cost data. No numeric answer computed."
+        }
+      ],
+      "default_prompt": true
+    }
+  ]
+}

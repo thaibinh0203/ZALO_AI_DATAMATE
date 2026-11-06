@@ -1,0 +1,489 @@
+{
+  "created_at_utc": "2026-11-06T03:28:27.817349+00:00",
+  "status": "pipeline_and_load_checks_passed_semantic_review_required",
+  "release_run": "outputs/data_pipeline/semantic_train_v2",
+  "pipeline_version": "postgres-pipeline-v2-semantic",
+  "scope": "Frozen train partition only",
+  "storage": "18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)",
+  "totals": {
+    "rows": 2040280,
+    "tables": 80,
+    "normalization_errors": 0,
+    "derived_errors": 4998,
+    "base_quantity_unresolved": 969,
+    "duplicate_rows": 6281
+  },
+  "semantic_summary": {
+    "existing_mapping": 416,
+    "described_other": 178,
+    "conflict_existing": 11,
+    "annotated_existing": 24,
+    "applied_candidate": 10,
+    "unresolved": 21,
+    "role_conflict": 11
+  },
+  "model_error_tables": 4,
+  "original_inference": {
+    "config": {
+      "model_path": "/home/pc/projects/datamate/models/qwen3-4b",
+      "device": "cuda:0",
+      "dtype": "bfloat16",
+      "max_new_tokens": 2048,
+      "max_context_tokens": 16384,
+      "seed": 42
+    },
+    "resolved_path": "/home/pc/projects/datamate/models/qwen3-4b",
+    "repo_id": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "decoding": {
+      "do_sample": false,
+      "num_beams": 1,
+      "enable_thinking": false
+    },
+    "versions": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.51.3",
+      "accelerate": "1.6.0",
+      "huggingface-hub": "0.30.2"
+    },
+    "actual_parameters": 4022468096,
+    "load_ms": 9640.134,
+    "generation_calls": 65,
+    "cache_hits": 11
+  },
+  "original_inference_observations": {
+    "max_prompt_tokens": 12442,
+    "max_cuda_allocated_bytes": 10876020736,
+    "raw_attempts": 76,
+    "parse_errors_including_retries": 4
+  },
+  "final_rebuild": {
+    "mode": "cached_revalidated",
+    "elapsed_ms": 393894.401,
+    "plan_reuses": 18,
+    "new_generation_calls": 0,
+    "note": "Profiles/proposals were generated with real local Qwen3-4B, then revalidated with the current role guard and sources normalized/loaded again. Replay is explicit in every model-call record."
+  },
+  "verification": {
+    "unit_and_integration": {
+      "run": 90,
+      "passed": 90,
+      "skipped": 0,
+      "log": "outputs/data_pipeline/semantic-tests.log"
+    },
+    "frozen_split_and_sources": "verified unchanged",
+    "database": {
+      "status": "passed",
+      "tables": 80,
+      "raw_rows": 2040280,
+      "clean_rows": 2033999,
+      "source_numeric_sums": 169,
+      "derived_base_quantity_sums": 80,
+      "derived_base_quantity_non_null": 1147208,
+      "audit_file": "outputs/data_pipeline/semantic_train_v2/database_validation.json"
+    },
+    "manual_spotcheck": {
+      "business_id": "biz_114",
+      "source": "docs/train/data/biz_114/README.md",
+      "mappings": {
+        "Mã GD": "order_id",
+        "Sluong": "quantity",
+        "Sản phẩm": "product_name",
+        "Tên khách": "customer_name"
+      },
+      "result": "Matches README descriptions. Not an accuracy estimate for all mappings."
+    },
+    "role_collision_regression": {
+      "business_id": "biz_113",
+      "column": "SL bán",
+      "result": "Kept physical NUMERIC without applying conflicting base_quantity role; original supplied base quantity remains accessible for all 32994 rows."
+    }
+  },
+  "demo": {
+    "run_dir": "outputs/data_pipeline/semantic_demo_v2",
+    "totals": {
+      "rows": 2,
+      "tables": 1,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 2,
+      "duplicate_rows": 0
+    },
+    "semantic_summary": {
+      "applied_candidate": 5,
+      "described_other": 1
+    },
+    "database_audit": "passed"
+  },
+  "businesses": [
+    {
+      "business_id": "biz_101",
+      "schema": "dm_biz_101_30ad4b10dcd4",
+      "fingerprint": "30ad4b10dcd407752070e5b47b826c9ad4a16df41acd24e6796d0ac62476fdc6",
+      "rows": 56501,
+      "tables": 1,
+      "normalization_errors": 0,
+      "derived_errors": 10,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 10
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_102",
+      "schema": "dm_biz_102_1e8828f83833",
+      "fingerprint": "1e8828f838330f22ca6237e11336ba2a16342c9842d03c3f6c3b0493d4c843f0",
+      "rows": 86106,
+      "tables": 2,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 13
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_103",
+      "schema": "dm_biz_103_ce611244d4f7",
+      "fingerprint": "ce611244d4f7508a4ab136627c8e71c535b15b1ef7cb19bee483232f8a17c2ca",
+      "rows": 45611,
+      "tables": 2,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 13
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_104",
+      "schema": "dm_biz_104_dcc5409d2ffc",
+      "fingerprint": "dcc5409d2ffc8efdbbcf96633c8e6baf02de8f0e5fc62da202f38da8b218eb66",
+      "rows": 62896,
+      "tables": 2,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 443,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 13
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_106",
+      "schema": "dm_biz_106_d7c551cbbe87",
+      "fingerprint": "d7c551cbbe87bc9c35870c2310c34a730a363cf9517e2bd552ffe66f2c466986",
+      "rows": 289353,
+      "tables": 9,
+      "normalization_errors": 0,
+      "derived_errors": 80,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 3230,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 48,
+        "described_other": 30,
+        "conflict_existing": 3,
+        "annotated_existing": 3,
+        "applied_candidate": 1
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_107",
+      "schema": "dm_biz_107_067313cb9a80",
+      "fingerprint": "067313cb9a80af5df4c920caa95a69902e6dd17ac962c931be76d38bec3a7602",
+      "rows": 43605,
+      "tables": 1,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 526,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "unresolved": 1,
+        "existing_mapping": 7
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_108",
+      "schema": "dm_biz_108_444b96660e3d",
+      "fingerprint": "444b96660e3d127f89050808470e1d704e5927f3cdbb100d2ba947b8d548fe2b",
+      "rows": 113696,
+      "tables": 7,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 38,
+        "conflict_existing": 4,
+        "described_other": 25,
+        "role_conflict": 5,
+        "annotated_existing": 2
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_109",
+      "schema": "dm_biz_109_2c32adb8c038",
+      "fingerprint": "2c32adb8c0386d34519bfdf50c6345f6b9a3931c2cca16a722c9c7394d192ebf",
+      "rows": 156626,
+      "tables": 9,
+      "normalization_errors": 0,
+      "derived_errors": 4908,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 45,
+        "conflict_existing": 4,
+        "described_other": 21,
+        "unresolved": 6,
+        "role_conflict": 3,
+        "annotated_existing": 2
+      },
+      "semantic_model_error_tables": 1,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_110",
+      "schema": "dm_biz_110_db03f14278e7",
+      "fingerprint": "db03f14278e7c27af876b879b2d97dc7b407f172ff045a78f21e1981ea6c0d8a",
+      "rows": 29317,
+      "tables": 1,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 5,
+        "unresolved": 3
+      },
+      "semantic_model_error_tables": 1,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_113",
+      "schema": "dm_biz_113_48f987594199",
+      "fingerprint": "48f98759419937b491f55cbdc0ee72cd7b868251908281ed8d3b198b02f46072",
+      "rows": 32994,
+      "tables": 1,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 6,
+        "role_conflict": 1,
+        "applied_candidate": 1
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_114",
+      "schema": "dm_biz_114_7fec213db6ab",
+      "fingerprint": "7fec213db6ab88cdb8dab3f6d80398970133aeafe591577deb20624bfe2824a4",
+      "rows": 26119,
+      "tables": 1,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 6,
+        "applied_candidate": 4
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_119",
+      "schema": "dm_biz_119_4fde0abd3aa8",
+      "fingerprint": "4fde0abd3aa8eef928c68a635f20fba8d9f5a0832f340ad4a675c594c75cce8e",
+      "rows": 172569,
+      "tables": 10,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 1908,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 50,
+        "annotated_existing": 6,
+        "described_other": 27
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_120",
+      "schema": "dm_biz_120_dc98448f8180",
+      "fingerprint": "dc98448f8180dbe9d1a11f51b95350599a41f3ea5afc90b56463ac9c4440fd52",
+      "rows": 240702,
+      "tables": 10,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 51,
+        "annotated_existing": 5,
+        "described_other": 22,
+        "role_conflict": 2
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_121",
+      "schema": "dm_biz_121_203917f39a66",
+      "fingerprint": "203917f39a66f6258fc417f0a7630f90e8864bde49c7826fc2f92cde49122272",
+      "rows": 172139,
+      "tables": 7,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 30,
+        "described_other": 12,
+        "unresolved": 3
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_122",
+      "schema": "dm_biz_122_fb27a528dea3",
+      "fingerprint": "fb27a528dea335af97310caf7725e91b2c0812a6b98dd39849054c6533cc5f74",
+      "rows": 214306,
+      "tables": 7,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 31,
+        "described_other": 15
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_125",
+      "schema": "dm_biz_125_6e21f9904eab",
+      "fingerprint": "6e21f9904eab67cd73820191475862e4c18895ae6843ea28138b5ac12614839b",
+      "rows": 79052,
+      "tables": 1,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 6,
+        "applied_candidate": 3,
+        "unresolved": 1
+      },
+      "semantic_model_error_tables": 0,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_126",
+      "schema": "dm_biz_126_5f52e410eb1e",
+      "fingerprint": "5f52e410eb1e84b99e5cfdb261554784bd4041f08ba30a8ba5b93313b59ac0c3",
+      "rows": 66429,
+      "tables": 1,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 0,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 6,
+        "unresolved": 2
+      },
+      "semantic_model_error_tables": 1,
+      "cache_hit": false
+    },
+    {
+      "business_id": "biz_128",
+      "schema": "dm_biz_128_14a2990bba4b",
+      "fingerprint": "14a2990bba4bcda3eef03a721ef234d11b0acf468a4a6ee5ac7d797ddc89a038",
+      "rows": 152259,
+      "tables": 8,
+      "normalization_errors": 0,
+      "derived_errors": 0,
+      "base_quantity_unresolved": 0,
+      "duplicate_rows": 1143,
+      "database_loaded": true,
+      "semantic_summary": {
+        "existing_mapping": 38,
+        "annotated_existing": 6,
+        "described_other": 26,
+        "applied_candidate": 1,
+        "unresolved": 5
+      },
+      "semantic_model_error_tables": 1,
+      "cache_hit": false
+    }
+  ],
+  "code_sha256": {
+    "src/datamate_data/__init__.py": "e39f0bea46ddfa806b2e5e00de83bd21f5d3906887879b7e042c7f9ba5eff091",
+    "src/datamate_data/adapters.py": "1fd01d0e08c8f28dfe94f50a35975eaa79af4f9b127a04c025717d8209ac4761",
+    "src/datamate_data/normalization.py": "71696f03e7d8d915aeb6524354b7587e6741811470613374df04c087b1976f10",
+    "src/datamate_data/parsers.py": "ae762f0bbaacbfad1feedd6c8a14cdd20c6ca893d9ee28bedc1b2fc4c922a82d",
+    "src/datamate_data/pipeline.py": "58738cfd4f75e8f8b71dcc28e28f9fcab48a75111eb8234ac44b411b65232d53",
+    "src/datamate_data/postgres.py": "579334be1f4d4a36344edc1ade307b26445702e60ef95fbecf21410fd27b7723",
+    "src/datamate_data/review.py": "b192e508d974435c62262642d899feb83cf3805290efb1ac72bedf31094a744e",
+    "src/datamate_data/semantic.py": "82911dd12c22079efa14f3421c28a4bfe38041c4f235df8421d893fb2980d12f",
+    "src/datamate_data/store.py": "8f5c9cea05b90e4d2e2666221cd96225d70fb8294e914c14c7193ccbd6075c2d"
+  },
+  "boundaries": {
+    "pipeline_reads_questions": false,
+    "pipeline_reads_answers": false,
+    "other_partitions_processed": false,
+    "public_processed": false,
+    "model_generated_sql_executed": false,
+    "qa_evaluation_run": false,
+    "training_run": false,
+    "real_sqlite_business_processed": false,
+    "synthetic_sqlite_test_passed": true,
+    "real_unknown_excel_header_slm_inference_exercised": false,
+    "unknown_excel_header_resolver_unit_test_passed": true
+  },
+  "limitations": [
+    "SLM mappings and joins remain candidates; exact loading/type checks do not prove business semantics.",
+    "Unresolved mappings, model contract failures and role conflicts are preserved in review files; source columns are retained.",
+    "Existing derived quantity discrepancies and missing units/quantities remain and must gate relevant metrics.",
+    "No question-to-SQL executor, training, embedding or reranker implemented in this change."
+  ]
+}

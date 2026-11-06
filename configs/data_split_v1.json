@@ -1,0 +1,33 @@
+{
+  "version": "data-split-v1",
+  "method": "Reviewed conservative core-layout families; fixed assignment, no question-level randomization or model-score selection",
+  "target_business_counts": {"train": 18, "development": 6, "calibration": 3, "holdout": 3},
+  "families": [
+    {"id": "flat_csv_lines", "partition": "train", "businesses": ["biz_101", "biz_114", "biz_125"], "reason": "Single CSV, sale-line grain, order/customer fields, quantities already converted; renamed/reordered columns do not create a new family."},
+    {"id": "single_sheet_no_order", "partition": "train", "businesses": ["biz_107", "biz_113", "biz_126"], "reason": "Single-sheet handwritten Excel, sale-line grain, no order ID/customer; same missing capabilities despite different column names."},
+    {"id": "order_line_export", "partition": "train", "businesses": ["biz_102", "biz_103", "biz_104", "biz_121", "biz_122"], "reason": "DonHang_ChiTiet plus DanhSachQuyDoi, repeated order attributes and product-name joins. Pharmacy variants add lots/imports/drug metadata; conservatively keep the shared core together, including monthly/year/file packaging variants."},
+    {"id": "pos_invoice_detail", "partition": "train", "businesses": ["biz_106", "biz_108", "biz_109", "biz_119", "biz_120", "biz_128"], "reason": "DanhSachHoaDon / DanhSachHoaDonChiTiet / DanhSachSanPham and keyed import/stock tables. Keep POS/software variants together despite workbook packing, added payments, pharmacy lots or restaurant tables."},
+    {"id": "invoice_only_csv", "partition": "train", "businesses": ["biz_110"], "reason": "One CSV, invoice grain, no product detail; distinct capabilities from flat sale-line CSV."},
+    {"id": "detailed_sales_report", "partition": "development", "businesses": ["biz_112", "biz_115", "biz_116", "biz_118", "biz_130"], "reason": "So_chi_tiet_ban_hang with Danh sach hang hoa, product-name joins; keep basic and delivery/debt extensions plus monthly/workbook/file variants in one family."},
+    {"id": "mixed_sources", "partition": "development", "businesses": ["biz_124"], "reason": "BanHang_ exports + SoTay_ ledgers + CSV stock with custom columns; unique combined layout, still shares general relational business concepts with POS."},
+    {"id": "monthly_handwritten", "partition": "calibration", "businesses": ["biz_105", "biz_117"], "reason": "Monthly SoBanHang with handwritten columns, negative return lines, DanhMuc/TonKho/SoNhapHang/BangGia; construction adds delivery/debt."},
+    {"id": "sqlite_pos", "partition": "calibration", "businesses": ["biz_123"], "reason": "Only SQLite business, 17 tables and IDCuaHang scope; unique physical schema, related POS concepts are explicitly not claimed absent from other sets."},
+    {"id": "relational_csv", "partition": "holdout", "businesses": ["biz_111", "biz_127", "biz_129"], "reason": "Same five CSV table roles: don_hang, chi_tiet_don, san_pham, khach_hang, thanh_toan. Different names/order of columns are grouped together."}
+  ],
+  "industries": {
+    "grocery": ["biz_101", "biz_102", "biz_103", "biz_107", "biz_108", "biz_109"],
+    "coffee": ["biz_104", "biz_105", "biz_106", "biz_111", "biz_112"],
+    "construction": ["biz_113", "biz_114", "biz_115", "biz_116", "biz_117", "biz_118"],
+    "pharmacy": ["biz_119", "biz_120", "biz_121", "biz_122", "biz_123", "biz_124"],
+    "restaurant": ["biz_125", "biz_126", "biz_127", "biz_128", "biz_129", "biz_130"],
+    "unknown": ["biz_110"]
+  },
+  "industry_evidence": "Inferred from README unit-conversion products and sector rules, drug/lot files, and sampled product rows. DanhSachQuyDoi rows confirm biz_102/103 grocery (Coca Cola) and biz_104 coffee (croissant/tiramisu); supplied question product names corroborate this. biz_110 has invoice-only data and no reliable explicit sector: kept unknown.",
+  "limitations": [
+    "Families are a reviewed conservative layout grouping, not a guarantee of no shared vocabulary, product names, question templates or semantic table roles across partitions.",
+    "Holdout isolates the relational-CSV family, has coffee/restaurant only, and contains no boolean or unanswerable labels. Report these limitations; do not use this score alone as a global estimate.",
+    "Only one SQLite and one mixed-source business exist; neither is in train. SQLite is used for calibration, mixed-source for development. Format coverage cannot be balanced across all four sets.",
+    "Answer types are used only for aggregate split diagnostics; answer/alias values are never used to select membership. No model predictions or public-test inputs are used.",
+    "Calibration has only three businesses and few rare-type labels; thresholds may be noisy. Use additional grouped validation within train if needed, without tuning on holdout."
+  ]
+}
