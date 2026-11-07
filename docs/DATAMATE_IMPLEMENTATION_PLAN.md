@@ -4,6 +4,10 @@ Ngày khảo sát: **05/11/2026, giờ Việt Nam**. Đây là kế hoạch tri�
 báo cáo rằng pipeline/train/Docker đã hoàn thành. Brief và PDF gốc được giữ nguyên.
 Các tên script/module chưa tồn tại dưới đây là **đầu ra dự kiến cần xây dựng**.
 
+Cập nhật 06/11/2026: pipeline đã có bản semantic được kiểm chứng riêng. Kế hoạch
+chi tiết phần tiếp theo, luồng agent và thí nghiệm từng công nghệ nằm ở
+[AGENT_FLOW_AND_EVAL_PLAN.md](AGENT_FLOW_AND_EVAL_PLAN.md).
+
 **Hướng đi đề xuất:** làm cho máy đọc đúng dữ liệu, áp dụng đúng luật và tính đúng
 trước; sau đó mới đánh giá model, bổ sung tìm kiếm hoặc fine-tuning theo lỗi đo được.
 Model phụ trách hiểu câu hỏi và lập kế hoạch; SQL/hàm Python phụ trách tính toán.

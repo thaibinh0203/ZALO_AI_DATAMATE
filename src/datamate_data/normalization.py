@@ -44,7 +44,7 @@ ALIASES = {
     "money": "Tổng tiền|TongTien|Tổng sau giảm giá|TongThanhToan|Giảm giá|ChietKhau|Khách đã trả|Da tra|KhachDaTra|Còn nợ|Chưa trả|ConPhaiThu|Giá trị|Số tiền thu|SoTienThu|So tien|Số tiền|Cần trả NCC|TongGiaTriNhap|PhiVanChuyen|ThueGTGT|TienHoanTra",
     "date": "Ngày|Ngày bán|Ngày tháng|Ngày giao dịch|Ngày lập|NgayLap|Ngày đặt hàng|Ngày nhập|NgayNhapKho|Ngày chở|Ngày áp dụng|NgayApDung|Hạn sử dụng|HanSuDung|Han tra|NgayKhaiTruong|ngay_sinh",
     "timestamp": "Giờ|Thời gian|Thời gian tạo|Thời điểm|ThoiGianLap|NgayGioThu|NgayGioTra|NgayGioPhatSinh|TaoLuc",
-    "status": "Trạng thái|Trạng thái đơn hàng|TinhTrang|Kết quả|Status|Ghi chú TT",
+    "status": "Trạng thái|Trạng thái đơn hàng|Trạng thái đơn|Trạng thái xử lý|TinhTrang|Kết quả|Status|Ghi chú TT",
     "boolean": "Thuốc kê đơn|Kê đơn|BanTheoDon",
     "balance": "Tồn thực|Tồn kho|Ton kho|Tồn cuối|Tồn cuối kỳ|TonCuoi|SLTraQuyDoi|Số lượng trả (ĐVT cơ bản)",
 }
@@ -58,6 +58,8 @@ def column_spec(name, description="", declared=""):
     role = BY_KEY.get(key(name), "text")
     desc = key(description)
     evidence = "header_alias" if role != "text" else "preserved_text"
+    if role == 'text' and desc in BY_KEY:
+        role, evidence = BY_KEY[desc], 'readme'
     # README descriptions disambiguate generic labels like TongTien/ThoiGian.
     if "thanhtiensaugiam" in desc:
         role, evidence = "line_amount", "readme"
@@ -180,7 +182,8 @@ def normalize_value(value, spec, *, year=None, cell=None):
             if key(value) not in choices: raise ValueError("invalid_boolean")
             return choices[key(value)],"ok",None
         if role=="status":
-            if key(value) not in STATUSES: raise ValueError("unknown_status")
+            if key(value) not in STATUSES:
+                return unicodedata.normalize("NFC", str(value)).strip(), "unmapped_status_preserved", None
             return STATUSES[key(value)],"ok",None
         if isinstance(value,float) and not math.isfinite(value): raise ValueError("non_finite_value")
         fmt=cell.get("number_format","")

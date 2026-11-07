@@ -1,0 +1,136 @@
+{
+  "status": "accepted_final",
+  "accepted_at_utc": "2026-11-07T10:04:56.147284+00:00",
+  "train_directory": "outputs/data_pipeline/train",
+  "lightweight_artifacts": "artifacts/data_pipeline_final",
+  "semantic_version": "semantic-v4",
+  "prompt_version": "canonical-first-alias-meaning-v8",
+  "refinement_version": "bounded-role-refinement-v1",
+  "tests": {
+    "passed": 115,
+    "skipped": 0,
+    "log": "artifacts/data_pipeline_final/tests.log"
+  },
+  "totals": {
+    "rows": 2040280,
+    "tables": 80,
+    "normalization_errors": 0,
+    "derived_errors": 4998,
+    "base_quantity_unresolved": 969,
+    "duplicate_rows": 6281
+  },
+  "semantic_summary": {
+    "existing_mapping": 464,
+    "unresolved": 15,
+    "described_other": 168,
+    "applied_candidate": 18,
+    "role_conflict": 6
+  },
+  "model_attempts": {
+    "logged_attempts": 83,
+    "cache_hits": 65,
+    "parse_errors_including_retried": 7,
+    "max_prompt_tokens": 14198,
+    "max_cuda_allocated_bytes": 11274966528,
+    "new_generation_calls": 18,
+    "generation_ms": 83338.31999999999
+  },
+  "database_validation": "passed",
+  "clean_rows": 2033999,
+  "refinement_comparison": {
+    "counts": {
+      "newly_usable": 7,
+      "lost_usable": 0,
+      "changed_previously_usable_role": 0
+    },
+    "before_status": {
+      "existing_mapping": 464,
+      "unresolved": 22,
+      "described_other": 161,
+      "applied_candidate": 18,
+      "role_conflict": 6
+    },
+    "after_status": {
+      "existing_mapping": 464,
+      "unresolved": 15,
+      "described_other": 168,
+      "applied_candidate": 18,
+      "role_conflict": 6
+    },
+    "refinement_attempts": {
+      "extra_requests": 18,
+      "new_generations": 18,
+      "cache_hits": 0,
+      "parse_errors": 3,
+      "generation_ms": 83338.32,
+      "eligible_columns": 18,
+      "accepted_final": 7,
+      "kept_original": 11
+    },
+    "baseline_verified_before_cleanup": true,
+    "primary_outputs_identical": true
+  },
+  "model": {
+    "config": {
+      "model_path": "/home/pc/projects/datamate/models/qwen3-4b",
+      "device": "cuda:0",
+      "dtype": "bfloat16",
+      "max_new_tokens": 2048,
+      "max_context_tokens": 16384,
+      "seed": 42
+    },
+    "resolved_path": "/home/pc/projects/datamate/models/qwen3-4b",
+    "repo_id": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "decoding": {
+      "do_sample": false,
+      "num_beams": 1,
+      "enable_thinking": false
+    },
+    "versions": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.51.3",
+      "accelerate": "1.6.0",
+      "huggingface-hub": "0.30.2"
+    },
+    "actual_parameters": 4022468096,
+    "load_ms": 8953.051,
+    "generation_calls": 18,
+    "cache_hits": 65
+  },
+  "alias_learning": false,
+  "questions_read": false,
+  "labels_read": false,
+  "generated_sql_executed": false,
+  "qa_accuracy_measured": false,
+  "removed_paths": [
+    "outputs/data_pipeline/train",
+    "outputs/data_pipeline_backups",
+    "outputs/data_pipeline/demo",
+    "outputs/data_pipeline/current_checks",
+    "outputs/data_pipeline/refinement_checks",
+    "outputs/data_pipeline/refinement_comparison",
+    "artifacts/refinement_experiment_v1"
+  ],
+  "notes": [
+    "Full staging/model-call logs remain local and are Git-ignored. Exported schema excludes row values and profiles.",
+    "Older PostgreSQL schemas are retained; this cleanup does not drop database objects.",
+    "Review remaining unresolved/colliding roles and ambiguous descriptions; no semantic accuracy claim."
+  ],
+  "code_sha256": {
+    "src/datamate_data/semantic.py": "fb853203feffb88efcc35988c8a5a888866d2d38aac25bb528662618f91f9776",
+    "src/datamate_data/normalization.py": "d78dabace7a017d9d73258eebe3d597bc89243bf16bd0888d0a8f75c5c9f29cf",
+    "scripts/prepare_pipeline.py": "be82bbe3b41de09b9cffc4dbb5ac59106d480dc207160d1a66a8ee27ed9a924c",
+    "scripts/compare_refinement_runs.py": "0a3df4efd5856958fc138da06d1501ac527d70587c17037bb1969017154a9463",
+    "tests/test_semantic_pipeline.py": "2b02647e3f7b8303b23e7a1e161cc1f1c866cce21cca792317472725dafc1a66",
+    "tests/test_data_pipeline.py": "169e2a357733affa09002a1dea3cb7c3235500aaeb395c7991582f1277084d39",
+    "configs/semantic_model.json": "27436f13847037478d64bbd3c2820a889a4f1fafd0fd431e63374e99e447e0a3",
+    "configs/data_pipeline.json": "fcfd41cd9615e1b9c32b869271ffd7db8efb13eb467fb662b9289d95b0cdadc5"
+  },
+  "post_cleanup_verification": {
+    "tests_passed": 115,
+    "database_validation": "passed",
+    "tables": 80,
+    "metadata_paths": "verified"
+  }
+}

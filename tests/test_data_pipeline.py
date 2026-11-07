@@ -57,7 +57,9 @@ class NormalizationTests(unittest.TestCase):
     def test_unknown_status_not_completed(self):
         spec=column_spec('Trạng thái')
         self.assertEqual(normalize_value('Đang giao',spec)[0],'delivering')
-        self.assertIsNone(normalize_value('something-new',spec)[0])
+        value,note,_=normalize_value('something-new',spec)
+        self.assertEqual(value,'something-new')
+        self.assertEqual(note,'unmapped_status_preserved')
 
     def test_conversion_store_scope_and_conflicting_factors(self):
         c=Conversions();c.add('SP1','hộp',12,'viên','a',store='A');c.add('SP1','hộp',24,'viên','b',store='B')

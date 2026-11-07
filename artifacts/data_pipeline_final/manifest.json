@@ -1,0 +1,32 @@
+{
+  "files_sha256": {
+    "README.md": "eaf73b0a5d2ed51cbbae6fead9c3115cce27111a7c43425da27944078cc4a7df",
+    "business_reviews/biz_101.md": "845a1239f61b69186c9bc4f3d92eb778a424137f0d7068ea3a1c62a40cc00baa",
+    "business_reviews/biz_102.md": "752130e95083ad45dd012bc243db80d569e10ea848730cab1d109a22e83b439b",
+    "business_reviews/biz_103.md": "a06362598c2d20d962d23fedc61a2ec6aff1928df5b57c6bd42803f6d1ea30df",
+    "business_reviews/biz_104.md": "17211003caf20d590b28a76d8d480577fcdb053a9e66eeb8f8ecf9cbc1578925",
+    "business_reviews/biz_106.md": "d915ee36a406433c80efef60ac194cc55ab4fefa4545aa21f971670d7dddccc5",
+    "business_reviews/biz_107.md": "0f372f5b4291fa9608e8423328332a11aef5cde2fecb88cea0b5aa531f2f61f8",
+    "business_reviews/biz_108.md": "2f6d933cbe95696512bfd9d0e97ef07f4c470e38a90d1ed8b3879b0c809562b4",
+    "business_reviews/biz_109.md": "6250890deab2524482797c8b193f10b6ca816e66cc6fd8b1c06e5c8f10202a34",
+    "business_reviews/biz_110.md": "1ef9531adf781ce75fad55d96b3e26dd3c0beef8af9338bba3a74a4d45b5917c",
+    "business_reviews/biz_113.md": "f99d403d93fdc988c14c53402e7e092d49a10362561d9bd156100fd10e44d891",
+    "business_reviews/biz_114.md": "3a5188130cb80d76fa93b44d6bcca3ed5579bee00d8b25237d5fe7b400b8537c",
+    "business_reviews/biz_119.md": "1eca8ae70a27b99d35196b4f239fe1223cfc2de2245551c3a1227af6514f3836",
+    "business_reviews/biz_120.md": "5aa9376820d000d87ad064e74108017f46ccd8dcdc014ac2994309f8445453bf",
+    "business_reviews/biz_121.md": "b3fbdf9f578e501f0d8e616006cba8a99a15255a438fd5458a498bfea1c435e8",
+    "business_reviews/biz_122.md": "7c114350695c25a21b39f95aac77a90181ad09af66d856dc88be6c58f2db06ae",
+    "business_reviews/biz_125.md": "4fa940707d993dfca1c11cfd5c9ab9c45e01ce66c5b9d41f8560a95af119d221",
+    "business_reviews/biz_126.md": "304d5a494449f00ebd910eac068a92dee67faba4cb48326e33b16c3507d944fb",
+    "business_reviews/biz_128.md": "a1a7385162da812bb0a16bc65d7e4713918a9a5d344a7608970f353ae7e1185a",
+    "database_validation.json": "8ccddfd90b3c92ae5bdc8e2b9262ab6aaa83026910a6b1ee5792af439a669ea3",
+    "git_readiness.json": "493a4a1bcdebed5f04db680b744bee951e74294baa5f11263aa7651bc974e7e6",
+    "refinement_comparison.json": "5e4f2ea365fbed00842c9537fd82542b8c75be87002f78c6ad0fa8b60f9217cd",
+    "refinement_comparison.md": "f83a1142dabdf27d55570509a7e7ac23e27e88a9a4e50a1932232139051ef584",
+    "schema_catalog.json": "f0e98430498f6863005f584f36eab16b2e2e481d95719a9ba59db7585cdc84d8",
+    "tests.log": "913278671805e71c153085ef03009b03f5c5d6a0cab89261dc55cd7250fb3b1c",
+    "validation.json": "61ac08f38903a4433270bd2e32552980c6cc00911ffd5971af40349a082b733e"
+  },
+  "contains_source_rows": false,
+  "contains_model_weights": false
+}

@@ -1,5 +1,5 @@
 {
-  "pipeline_version": "postgres-pipeline-v2-semantic",
+  "pipeline_version": "postgres-pipeline-v4-semantic",
   "semantic_mode": "local",
   "semantic_model_path": "models/qwen3-4b",
   "semantic_cache": ".cache/datamate_semantics",

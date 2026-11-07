@@ -1,0 +1,16 @@
+{"output": "/tmp/tmp1qmkq3p4/out.jsonl", "run_log": "/tmp/tmp1qmkq3p4/out.jsonl.run.json", "failures": 2}
+{"semantic_business": "demo", "table": "export_9a00377a", "targets": 0, "model_error": null, "review": {"existing_mapping": 2}}
+{"semantic_business": "demo", "table": "export_d3c3b680", "targets": 2, "model_error": null, "review": {"unresolved": 1, "described_other": 1, "existing_mapping": 1}}
+{"semantic_business": "demo", "table": "export_f8b0cabe", "targets": 1, "model_error": null, "review": {"described_other": 1, "existing_mapping": 1}}
+{"semantic_business": "demo", "table": "export_f8b0cabe", "targets": 1, "model_error": null, "review": {"described_other": 1, "existing_mapping": 1}}
+{"semantic_business": "demo", "table": "products_697e45fb", "targets": 1, "model_error": null, "review": {"existing_mapping": 1, "described_other": 1}}
+{"semantic_business": "demo", "table": "export_ca7e7bdd", "targets": 1, "model_error": null, "review": {"existing_mapping": 3, "role_conflict": 1}}
+{"semantic_business": "demo", "table": "export_63cdbdf2", "targets": 2, "model_error": null, "review": {"applied_candidate": 2}}
+{"semantic_business": "demo", "table": "export_f2561392", "targets": 2, "model_error": "JSONDecodeError: synthetic malformed result", "review": {"unresolved": 2}}
+{"semantic_business": "demo", "table": "export_21dcfc67", "targets": 6, "model_error": null, "review": {"applied_candidate": 5, "described_other": 1}}
+{"semantic_business": "demo", "table": "export_f2561392", "targets": 2, "model_error": "Unknown evidence reference", "review": {"unresolved": 2}}
+{"semantic_business": "demo", "table": "export_sheet_0e612522", "targets": 3, "model_error": null, "review": {"applied_candidate": 3}}
+----------------------------------------------------------------------
+Ran 115 tests in 5.893s
+
+OK

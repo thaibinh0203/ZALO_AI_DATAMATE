@@ -1,0 +1,520 @@
+{
+  "counts": {
+    "newly_usable": 7,
+    "lost_usable": 0,
+    "changed_previously_usable_role": 0
+  },
+  "before_status": {
+    "existing_mapping": 464,
+    "unresolved": 22,
+    "described_other": 161,
+    "applied_candidate": 18,
+    "role_conflict": 6
+  },
+  "after_status": {
+    "existing_mapping": 464,
+    "unresolved": 15,
+    "described_other": 168,
+    "applied_candidate": 18,
+    "role_conflict": 6
+  },
+  "refinement_attempts": {
+    "extra_requests": 18,
+    "new_generations": 18,
+    "cache_hits": 0,
+    "parse_errors": 3,
+    "generation_ms": 83338.32,
+    "eligible_columns": 18,
+    "accepted_final": 7,
+    "kept_original": 11
+  },
+  "changes": [
+    {
+      "business": "biz_106",
+      "table": "danhsachkhachhang_496bf16d",
+      "column": "Điện thoại",
+      "before_role": {
+        "canonical": null,
+        "semantic": null
+      },
+      "after_role": {
+        "canonical": null,
+        "semantic": "customer_phone"
+      },
+      "before_type": "TEXT",
+      "after_type": "TEXT",
+      "before_status": "unresolved",
+      "after_status": "described_other",
+      "before_meaning": "Số điện thoại của khách hàng",
+      "after_meaning": "Số điện thoại của khách hàng",
+      "refinement": {
+        "version": "bounded-role-refinement-v1",
+        "attempted": true,
+        "accepted": true,
+        "max_extra_requests": 1,
+        "initial_proposal": {
+          "column": "Điện thoại",
+          "role": "other",
+          "semantic_role": "text",
+          "sql_type": "TEXT",
+          "meaning": "Số điện thoại của khách hàng",
+          "unit": null,
+          "handling": "Giữ nguyên thông tin không có định nghĩa rõ ràng",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Điện thoại"
+            }
+          ]
+        },
+        "initial_checks": [
+          "invalid_semantic_role"
+        ],
+        "candidate_proposal": {
+          "column": "Điện thoại",
+          "role": "other",
+          "semantic_role": "customer_phone",
+          "sql_type": "TEXT",
+          "meaning": "Số điện thoại của khách hàng",
+          "unit": null,
+          "handling": "Giữ nguyên thông tin không có định nghĩa rõ ràng",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Điện thoại"
+            }
+          ]
+        },
+        "candidate_checks": [
+          "literal_source_evidence_present",
+          "name_and_raw_values_preserved"
+        ],
+        "reason": "specific_role_validated"
+      },
+      "checks": [
+        "literal_source_evidence_present",
+        "name_and_raw_values_preserved"
+      ]
+    },
+    {
+      "business": "biz_106",
+      "table": "danhsachkhachhang_496bf16d",
+      "column": "Loại hình khách",
+      "before_role": {
+        "canonical": null,
+        "semantic": null
+      },
+      "after_role": {
+        "canonical": null,
+        "semantic": "khach_hang_loai_hinh"
+      },
+      "before_type": "TEXT",
+      "after_type": "TEXT",
+      "before_status": "unresolved",
+      "after_status": "described_other",
+      "before_meaning": "Loại hình khách hàng",
+      "after_meaning": "Loại hình khách hàng",
+      "refinement": {
+        "version": "bounded-role-refinement-v1",
+        "attempted": true,
+        "accepted": true,
+        "max_extra_requests": 1,
+        "initial_proposal": {
+          "column": "Loại hình khách",
+          "role": "other",
+          "semantic_role": "text",
+          "sql_type": "TEXT",
+          "meaning": "Loại hình khách hàng",
+          "unit": null,
+          "handling": "Giữ nguyên thông tin không có định nghĩa rõ ràng",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Loại hình khách"
+            }
+          ]
+        },
+        "initial_checks": [
+          "invalid_semantic_role"
+        ],
+        "candidate_proposal": {
+          "column": "Loại hình khách",
+          "role": "other",
+          "semantic_role": "khach_hang_loai_hinh",
+          "sql_type": "TEXT",
+          "meaning": "Loại hình khách hàng",
+          "unit": null,
+          "handling": "Giữ nguyên thông tin không có định nghĩa rõ ràng",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Loại hình khách"
+            }
+          ]
+        },
+        "candidate_checks": [
+          "literal_source_evidence_present",
+          "name_and_raw_values_preserved"
+        ],
+        "reason": "specific_role_validated"
+      },
+      "checks": [
+        "literal_source_evidence_present",
+        "name_and_raw_values_preserved"
+      ]
+    },
+    {
+      "business": "biz_106",
+      "table": "danhsachsanpham_e89704d9",
+      "column": "Thuộc tính",
+      "before_role": {
+        "canonical": null,
+        "semantic": null
+      },
+      "after_role": {
+        "canonical": null,
+        "semantic": "product_attribute"
+      },
+      "before_type": "TEXT",
+      "after_type": "TEXT",
+      "before_status": "unresolved",
+      "after_status": "described_other",
+      "before_meaning": "Thuộc tính của sản phẩm",
+      "after_meaning": "Thuộc tính của sản phẩm",
+      "refinement": {
+        "version": "bounded-role-refinement-v1",
+        "attempted": true,
+        "accepted": true,
+        "max_extra_requests": 1,
+        "initial_proposal": {
+          "column": "Thuộc tính",
+          "role": "other",
+          "semantic_role": "text",
+          "sql_type": "TEXT",
+          "meaning": "Thuộc tính của sản phẩm",
+          "unit": null,
+          "handling": "Giữ thông tin không có dữ liệu cụ thể",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Thuộc tính"
+            }
+          ]
+        },
+        "initial_checks": [
+          "invalid_semantic_role"
+        ],
+        "candidate_proposal": {
+          "column": "Thuộc tính",
+          "role": "other",
+          "semantic_role": "product_attribute",
+          "sql_type": "TEXT",
+          "meaning": "Thuộc tính của sản phẩm",
+          "unit": null,
+          "handling": "Giữ thông tin không có dữ liệu cụ thể",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Thuộc tính"
+            }
+          ]
+        },
+        "candidate_checks": [
+          "literal_source_evidence_present",
+          "name_and_raw_values_preserved"
+        ],
+        "reason": "specific_role_validated"
+      },
+      "checks": [
+        "literal_source_evidence_present",
+        "name_and_raw_values_preserved"
+      ]
+    },
+    {
+      "business": "biz_106",
+      "table": "danhsachsanpham_e89704d9",
+      "column": "Loại hàng hóa",
+      "before_role": {
+        "canonical": null,
+        "semantic": null
+      },
+      "after_role": {
+        "canonical": null,
+        "semantic": "product_type"
+      },
+      "before_type": "TEXT",
+      "after_type": "TEXT",
+      "before_status": "unresolved",
+      "after_status": "described_other",
+      "before_meaning": "Loại hàng hóa",
+      "after_meaning": "Loại hàng hóa",
+      "refinement": {
+        "version": "bounded-role-refinement-v1",
+        "attempted": true,
+        "accepted": true,
+        "max_extra_requests": 1,
+        "initial_proposal": {
+          "column": "Loại hàng hóa",
+          "role": "other",
+          "semantic_role": "text",
+          "sql_type": "TEXT",
+          "meaning": "Loại hàng hóa",
+          "unit": null,
+          "handling": "Giữ thông tin không có dữ liệu cụ thể",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Loại hàng hóa"
+            }
+          ]
+        },
+        "initial_checks": [
+          "invalid_semantic_role"
+        ],
+        "candidate_proposal": {
+          "column": "Loại hàng hóa",
+          "role": "other",
+          "semantic_role": "product_type",
+          "sql_type": "TEXT",
+          "meaning": "Loại hàng hóa",
+          "unit": null,
+          "handling": "Giữ thông tin không có dữ liệu cụ thể",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Loại hàng hóa"
+            }
+          ]
+        },
+        "candidate_checks": [
+          "literal_source_evidence_present",
+          "name_and_raw_values_preserved"
+        ],
+        "reason": "specific_role_validated"
+      },
+      "checks": [
+        "literal_source_evidence_present",
+        "name_and_raw_values_preserved"
+      ]
+    },
+    {
+      "business": "biz_120",
+      "table": "danhsachkhachhang_7f5e2a72",
+      "column": "E-mail",
+      "before_role": {
+        "canonical": null,
+        "semantic": null
+      },
+      "after_role": {
+        "canonical": null,
+        "semantic": "email"
+      },
+      "before_type": "TEXT",
+      "after_type": "TEXT",
+      "before_status": "unresolved",
+      "after_status": "described_other",
+      "before_meaning": "E-mail không có dữ liệu",
+      "after_meaning": "E-mail không có dữ liệu",
+      "refinement": {
+        "version": "bounded-role-refinement-v1",
+        "attempted": true,
+        "accepted": true,
+        "max_extra_requests": 1,
+        "initial_proposal": {
+          "column": "E-mail",
+          "role": "other",
+          "semantic_role": "text",
+          "sql_type": "TEXT",
+          "meaning": "E-mail không có dữ liệu",
+          "unit": null,
+          "handling": "Giữ thông tin timezone chưa được nguồn xác định",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "E-mail"
+            }
+          ]
+        },
+        "initial_checks": [
+          "invalid_semantic_role"
+        ],
+        "candidate_proposal": {
+          "column": "E-mail",
+          "role": "other",
+          "semantic_role": "email",
+          "sql_type": "TEXT",
+          "meaning": "E-mail không có dữ liệu",
+          "unit": null,
+          "handling": "Giữ thông tin timezone chưa được nguồn xác định",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "E-mail"
+            }
+          ]
+        },
+        "candidate_checks": [
+          "literal_source_evidence_present",
+          "name_and_raw_values_preserved"
+        ],
+        "reason": "specific_role_validated"
+      },
+      "checks": [
+        "literal_source_evidence_present",
+        "name_and_raw_values_preserved"
+      ]
+    },
+    {
+      "business": "biz_122",
+      "table": "danhsachsanpham_6a9d2ed1",
+      "column": "Vị trí",
+      "before_role": {
+        "canonical": null,
+        "semantic": null
+      },
+      "after_role": {
+        "canonical": null,
+        "semantic": "location"
+      },
+      "before_type": "TEXT",
+      "after_type": "TEXT",
+      "before_status": "unresolved",
+      "after_status": "described_other",
+      "before_meaning": "Vị trí không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+      "after_meaning": "Vị trí không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+      "refinement": {
+        "version": "bounded-role-refinement-v1",
+        "attempted": true,
+        "accepted": true,
+        "max_extra_requests": 1,
+        "initial_proposal": {
+          "column": "Vị trí",
+          "role": "other",
+          "semantic_role": "text",
+          "sql_type": "TEXT",
+          "meaning": "Vị trí không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+          "unit": null,
+          "handling": "Giữ thông tin không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Vị trí"
+            }
+          ]
+        },
+        "initial_checks": [
+          "invalid_semantic_role"
+        ],
+        "candidate_proposal": {
+          "column": "Vị trí",
+          "role": "other",
+          "semantic_role": "location",
+          "sql_type": "TEXT",
+          "meaning": "Vị trí không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+          "unit": null,
+          "handling": "Giữ thông tin không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Vị trí"
+            }
+          ]
+        },
+        "candidate_checks": [
+          "literal_source_evidence_present",
+          "name_and_raw_values_preserved"
+        ],
+        "reason": "specific_role_validated"
+      },
+      "checks": [
+        "literal_source_evidence_present",
+        "name_and_raw_values_preserved"
+      ]
+    },
+    {
+      "business": "biz_122",
+      "table": "danhsachsanpham_6a9d2ed1",
+      "column": "Thương hiệu",
+      "before_role": {
+        "canonical": null,
+        "semantic": null
+      },
+      "after_role": {
+        "canonical": null,
+        "semantic": "product_brand"
+      },
+      "before_type": "TEXT",
+      "after_type": "TEXT",
+      "before_status": "unresolved",
+      "after_status": "described_other",
+      "before_meaning": "Thương hiệu không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+      "after_meaning": "Thương hiệu không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+      "refinement": {
+        "version": "bounded-role-refinement-v1",
+        "attempted": true,
+        "accepted": true,
+        "max_extra_requests": 1,
+        "initial_proposal": {
+          "column": "Thương hiệu",
+          "role": "other",
+          "semantic_role": "text",
+          "sql_type": "TEXT",
+          "meaning": "Thương hiệu không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+          "unit": null,
+          "handling": "Giữ thông tin không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Thương hiệu"
+            }
+          ]
+        },
+        "initial_checks": [
+          "invalid_semantic_role"
+        ],
+        "candidate_proposal": {
+          "column": "Thương hiệu",
+          "role": "other",
+          "semantic_role": "product_brand",
+          "sql_type": "TEXT",
+          "meaning": "Thương hiệu không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+          "unit": null,
+          "handling": "Giữ thông tin không có nghĩa rõ ràng từ tiêu đề hoặc mô tả",
+          "status": "proposed",
+          "evidence": [
+            {
+              "source": "header",
+              "quote": "Thương hiệu"
+            }
+          ]
+        },
+        "candidate_checks": [
+          "literal_source_evidence_present",
+          "name_and_raw_values_preserved"
+        ],
+        "reason": "specific_role_validated"
+      },
+      "checks": [
+        "literal_source_evidence_present",
+        "name_and_raw_values_preserved"
+      ]
+    }
+  ],
+  "primary_outputs_identical": true,
+  "changed_staging_tables": [],
+  "scope": "Historical comparison recorded before cleanup. Pre-refinement baseline was deleted after user accepted refinement.",
+  "baseline_verified_before_cleanup": true
+}

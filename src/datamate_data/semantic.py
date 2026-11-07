@@ -16,11 +16,12 @@ from copy import deepcopy
 
 from datamate_b.contracts import strict_json
 from .adapters import adapt
-from .normalization import ALIASES, MONEY, SQL_TYPES, key, normalize_value
+from .normalization import ALIASES, BY_KEY, MONEY, SQL_TYPES, key, normalize_value
 from .parsers import dumps, parse_file
 
-SEMANTIC_VERSION = 'semantic-v2'
-PROMPT_VERSION = 'source-grounded-column-proposals-v5-evidence-pointers'
+SEMANTIC_VERSION = 'semantic-v4'
+PROMPT_VERSION = 'canonical-first-alias-meaning-v8'
+REFINEMENT_VERSION = 'bounded-role-refinement-v1'
 TYPES = {'TEXT', 'NUMERIC', 'DATE', 'TIMESTAMP', 'BOOLEAN'}
 ROLES = set(ALIASES) | {'text', 'other'}
 SYSTEM = '''You describe Vietnamese business source data for an offline SQL system.
@@ -30,28 +31,52 @@ Never generate SQL, code, arithmetic answers or new columns. Do not infer missin
 business facts. Distinguish physical type, semantic meaning, unit and row grain.
 Identifiers are TEXT even when their values are numeric. Values alone cannot prove
 a monetary field is revenue or that two tables have a valid business relationship.
-Use the provided role vocabulary; use other for a genuinely new concept and give
-its meaning. Preserve ambiguity with status=unresolved. Do not force categories.
-Semantic role is separate from physical type: use order_id/product_name for a
-clearly documented order key/product name even though their physical type is TEXT.
-Prefer the specific defined role over generic money/text when README supports it.
-For a new concept use other, but still infer its physical type from the whole-column
-parse_successes. Preserve TEXT for identifiers, mixed values and empty columns.
+Infer meaning jointly from source table, sibling columns, related business tables,
+README and rulebook. README defines source-specific meaning; rulebook constrains
+metrics but cannot establish a column mapping or join by itself. Related tables
+are context, never proof that a join is valid. Never copy a sibling column's role
+merely because types or sample values match.
+Separate canonical_role (provided vocabulary or null), semantic_role (a concise,
+specific snake_case concept or null), physical type, meaning and data availability.
+Follow this order: rule-based mappings are already resolved and are context only.
+For each unresolved target, FIRST find its description in README. Compare the
+meaning, table context and values to ALL canonical definitions and supplied
+Vietnamese alias examples. Different spelling does NOT imply a different role.
+If meaning matches an existing canonical concept, choose that canonical_role,
+semantic_role=null. Only if NO canonical concept fits, suggest a semantic_role.
+Aliases are examples of the canonical meaning, not an exhaustive list of names.
+A status column can be recognized without knowing every status value; preserve
+unknown values rather than guessing completed/cancelled/returned.
+Use a canonical role only when the column matches its precise definition. For a
+new concept propose a semantic_role such as customer_created_at rather than force
+it into a generic transaction date. Do not use other/text/unknown as semantic roles. Do not copy a canonical role
+name into semantic_role: use the canonical field when its exact definition fits.
+Otherwise name the actual specific concept, not a nearby category. A supplier is
+not a customer; an employee/creator is not a customer name; a tax/national ID is
+not a customer account key. Meaning must describe the source concept in Vietnamese.
+If canonical_role is specific, semantic_role can be null; otherwise propose a
+useful semantic_role supported by the header/README. New roles describe columns;
+they NEVER authorize executable transforms, joins, conversions or formulas.
+An empty column may still have a clear meaning from its header/README: describe
+that meaning and role, retain TEXT, and say its actual values are unavailable.
+A constant non-empty column IS data, not empty. Native bool supports BOOLEAN;
+native datetime plus a date/time description supports TIMESTAMP. A number alone
+cannot establish a date, flag, identifier, quantity or conversion direction.
+Avoid unknown when the source supports a partial description. Preserve what is
+known and state missing units/direction/interpretation in handling. If no useful
+role/meaning is supported, return null roles and null meaning, never invent facts.
 Evidence must select an existing ID from evidence_catalog. Do not write or
-paraphrase evidence quotes. Code will resolve the ID to the exact source text.
-Handling is descriptive advice only, not an executable transformation.
-Return exactly one JSON object, no markdown. Be concise; no confidence scores.
-For task=columns the object has exactly keys columns, grain, relationships, handling.
-columns contains exactly one compact array for EACH target_columns entry, in order:
-[column, role, sql_type, meaning, unit, evidence_ref].
-NEVER include context_columns: they are NOT target columns. Do NOT rewrite any
-column name; copy the target name exactly. role is from roles or unresolved;
-sql_type is TEXT/NUMERIC/DATE/TIMESTAMP/BOOLEAN. meaning is at most 8 words;
-unit is string or null. evidence_ref is exactly one ID from evidence_catalog.
-For uncertainty use role=unresolved, sql_type=TEXT.
-grain and handling are short strings, at most 15 words each, or unknown.
-Formatting example ONLY (the placeholder is not a real column):
-{"columns":[["<copy target name>","other","TEXT","unknown",null,"H0"]],"grain":"unknown","relationships":[],"handling":"preserve raw"}
+paraphrase evidence quotes. Handling is advice only, never executable code.
+Return exactly one JSON object, no markdown. For task=columns use exactly keys
+columns, grain, relationships, handling. Return one seven-field array per target:
+[column, canonical_role, semantic_role, sql_type, meaning, unit, evidence_ref].
+Copy target names exactly, in order; NEVER output context columns. canonical_role
+is from roles (excluding other/text) or null. semantic_role is snake_case or null.
+sql_type is TEXT/NUMERIC/DATE/TIMESTAMP/BOOLEAN. meaning is a short useful source-
+grounded description (up to 20 words) or null. unit is string or null. evidence_ref
+is one existing evidence ID. grain and handling are short strings. A formatting
+example for an invented customer field ONLY, not an expected source mapping:
+{"columns":[["Example customer signup time",null,"customer_created_at","TIMESTAMP","Time customer profile was created",null,"H0"]],"grain":"One customer profile","relationships":[],"handling":"Giữ thông tin timezone chưa được nguồn xác định"}
 relationships is a list of proposed joins, each with source_columns, target_table,
 target_columns, evidence. Use only table/column names in related_tables. Empty is
 preferred when not supported. All joins remain proposals, not verified facts.
@@ -72,7 +97,7 @@ ROLE_DEFINITIONS={
     'unit_price':'price per one row unit, NUMERIC','unit_cogs':'cost per one selling unit, NUMERIC',
     'money':'other monetary amount with unspecified grain, NUMERIC',
     'date':'calendar date, DATE','timestamp':'date and time, TIMESTAMP',
-    'boolean':'true/false flag, BOOLEAN','status':'business status, explicit mapping required',
+    'boolean':'true/false flag, BOOLEAN','status':'business/order status column, TEXT; recognizing its role does not define the meaning of each value',
     'balance':'stock/debt balance or returned base quantity; confirm meaning separately',
     'lot_id':'batch/lot code, TEXT','line_number':'row sequence, NUMERIC',
     'text':'text not assigned a specific operational role','other':'new concept, preserve meaning independently of physical type'}
@@ -195,6 +220,34 @@ def evidence_valid(evidence, header, readme, rules):
     return True
 
 
+def attach_roles(column):
+    """Public semantic metadata; internal role remains the deterministic operand."""
+    audit = column.get('semantic', {})
+    role = column.get('role')
+    column['canonical_role'] = role if role not in {None, 'text', 'other'} else None
+    column['semantic_role'] = None
+    if column['canonical_role'] is None and audit.get('status') != 'existing_mapping':
+        proposal = audit.get('normalized_proposal') or audit.get('proposed') or {}
+        if audit.get('status') in {'applied_candidate', 'described_other', 'annotated_existing'}:
+            column['semantic_role'] = proposal.get('semantic_role')
+    profile = column.get('source_profile')
+    column['has_data'] = bool(profile['non_empty']) if profile is not None else None
+    return column
+
+
+def useful_meaning(value):
+    return isinstance(value, str) and value.strip().casefold() not in {
+        '', 'unknown', 'none', 'null', 'n/a', 'unclear', 'không rõ', 'chưa rõ'}
+
+
+def resolve_canonical_role(value):
+    if not isinstance(value, str):
+        return None
+    normalized = key(value)
+    roles = {key(role): role for role in ALIASES}
+    return roles.get(normalized) or BY_KEY.get(normalized)
+
+
 def validate_column(column, proposal, profile, readme, rules):
     """Return a reviewed spec. Reject unsafe proposals without discarding the column."""
     final = dict(column)
@@ -203,50 +256,161 @@ def validate_column(column, proposal, profile, readme, rules):
     final['semantic'] = audit
     final['source_profile'] = profile
     expected = {'column', 'role', 'sql_type', 'meaning', 'unit', 'handling', 'status', 'evidence'}
-    if not isinstance(proposal, dict) or set(proposal) != expected:
-        audit['checks'].append('invalid_proposal_contract'); return final
+    if not isinstance(proposal, dict) or set(proposal) not in (expected, expected | {'semantic_role'}):
+        audit['checks'].append('invalid_proposal_contract'); return attach_roles(final)
     if proposal['column'] != column['original_name']:
-        audit['checks'].append('unknown_or_mismatched_column'); return final
+        audit['checks'].append('unknown_or_mismatched_column'); return attach_roles(final)
+    # Preserve the original model proposal; normalize field placement separately.
+    proposal = deepcopy(proposal)
+    semantic_role = proposal.get('semantic_role')
+    canonical = resolve_canonical_role(proposal['role'])
+    promoted = resolve_canonical_role(semantic_role)
+    if canonical and promoted and canonical != promoted:
+        audit['checks'].append('conflicting_canonical_role_fields'); return attach_roles(final)
+    if promoted:
+        proposal['role'] = promoted
+        proposal['semantic_role'] = None
+        audit['checks'].append('canonical_role_promoted_from_semantic_role')
+        canonical = promoted
+    elif canonical:
+        proposal['role'] = canonical
+        proposal['semantic_role'] = None
+    semantic_role = proposal.get('semantic_role')
+    audit['normalized_proposal'] = deepcopy(proposal)
+    if semantic_role is not None and (not isinstance(semantic_role, str) or not re.fullmatch(r'[a-z][a-z0-9_]{1,79}', semantic_role) or semantic_role in {'unknown','null','none','other','text'}):
+        audit['checks'].append('invalid_semantic_role'); return attach_roles(final)
     if not isinstance(proposal['role'], str) or proposal['role'] not in ROLES or not isinstance(proposal['sql_type'], str) or proposal['sql_type'] not in TYPES:
-        audit['checks'].append('unsupported_role_or_type'); return final
+        audit['checks'].append('unsupported_role_or_type'); return attach_roles(final)
     if not isinstance(proposal['status'], str) or proposal['status'] not in {'proposed', 'unresolved'} or any(
             not isinstance(proposal[k], str) for k in ('meaning', 'handling')) or (
             proposal['unit'] is not None and not isinstance(proposal['unit'], str)):
-        audit['checks'].append('invalid_proposal_values'); return final
+        audit['checks'].append('invalid_proposal_values'); return attach_roles(final)
     if not evidence_valid(proposal['evidence'], column['original_name'], readme, rules):
-        audit['checks'].append('evidence_not_in_source'); return final
+        audit['checks'].append('evidence_not_in_source'); return attach_roles(final)
     audit['checks'].append('literal_source_evidence_present')
+    if not useful_meaning(proposal['meaning']):
+        audit['checks'].append('meaning_not_established'); return attach_roles(final)
     if proposal['status'] == 'unresolved':
-        audit['checks'].append('model_declared_ambiguity'); return final
+        audit['checks'].append('model_declared_ambiguity'); return attach_roles(final)
     role = 'text' if proposal['role'] == 'other' else proposal['role']
     typ = proposal['sql_type']
     # Existing aliases/README/declared types remain stable; model conflicts are visible.
     if column['role'] != 'text' or column['evidence'] != 'preserved_text':
         audit['status'] = 'annotated_existing' if (role, typ) == (column['role'], column['sql_type']) else 'conflict_existing'
         audit['checks'].append('existing_mapping_preserved')
-        return final
+        return attach_roles(final)
     expected_type = SQL_TYPES.get(role, 'TEXT')
     if role != 'text' and typ != expected_type:
-        audit['checks'].append('role_type_conflict'); return final
+        audit['checks'].append('role_type_conflict'); return attach_roles(final)
     if typ != 'TEXT':
         non_empty = profile['non_empty']
         passed = profile['parse_successes'].get(candidate_name(role, typ), 0)
         if non_empty == 0 or passed != non_empty:
-            audit['checks'].append(f'full_column_parse_failed:{passed}/{non_empty}'); return final
+            audit['checks'].append(f'full_column_parse_failed:{passed}/{non_empty}'); return attach_roles(final)
         if typ == 'NUMERIC' and profile['leading_zero_values']:
-            audit['checks'].append('leading_zero_identifier_risk'); return final
+            audit['checks'].append('leading_zero_identifier_risk'); return attach_roles(final)
         audit['checks'].append('all_non_empty_values_parse')
     # A rulebook can define a metric, but cannot prove an arbitrary source field is it.
     if not any(e['source'] in {'header', 'readme'} for e in proposal['evidence']):
-        audit['checks'].append('missing_field_specific_evidence'); return final
-    if role == 'status':
-        audit['checks'].append('status_vocabulary_requires_explicit_mapping'); return final
+        audit['checks'].append('missing_field_specific_evidence'); return attach_roles(final)
     if role == 'conversion_factor' and (profile.get('numeric_min') is None or Decimal(profile['numeric_min'])<=0):
-        audit['checks'].append('conversion_factor_must_be_positive'); return final
+        audit['checks'].append('conversion_factor_must_be_positive'); return attach_roles(final)
     final.update(role=role, sql_type=typ, evidence='slm_source_grounded_candidate')
     audit['status'] = 'applied_candidate' if (role, typ) != (column['role'], column['sql_type']) else 'described_other'
     audit['checks'].append('name_and_raw_values_preserved')
-    return final
+    return attach_roles(final)
+
+
+def refine_column(column, proposal, profile, readme, rules, *, model, payload,
+                  references, audit_path):
+    """One extra request for a useful description lacking a specific role.
+
+    Keep the original result unless a source-validated role is obtained. No alias
+    learning, model-proposed type changes, refinement retries, or sibling changes.
+    """
+    original = validate_column(column, proposal, profile, readme, rules)
+    if not isinstance(proposal, dict):
+        return original
+    generic = proposal.get('semantic_role')
+    if not (original['canonical_role'] is None and original['semantic_role'] is None
+            and original['semantic']['status'] in {'unresolved', 'described_other'}
+            and isinstance(proposal.get('role'), str) and proposal['role'] in {'other', 'text'}
+            and (generic is None or isinstance(generic, str) and generic in {'text', 'other', 'unknown', 'none', 'null'})
+            and proposal.get('status') == 'proposed' and useful_meaning(proposal.get('meaning'))
+            and evidence_valid(proposal.get('evidence'), column['original_name'], readme, rules)
+            and set(original['semantic']['checks']) <= {
+                'invalid_semantic_role', 'literal_source_evidence_present', 'name_and_raw_values_preserved'}):
+        return original
+    audit = {'version': REFINEMENT_VERSION, 'attempted': True,
+             'accepted': False, 'max_extra_requests': 1,
+             'initial_proposal': deepcopy(proposal),
+             'initial_checks': list(original['semantic']['checks'])}
+    original['semantic']['refinement'] = audit
+    name = column['original_name']
+    request = {**payload, 'target_columns': [name], 'profiles': [profile],
+        'target_descriptions': {name: column['description']},
+        'semantic_refinement': {
+            'version': REFINEMENT_VERSION,
+            'initial_proposal': proposal,
+            'validation_checks': original['semantic']['checks'],
+            'instruction': 'The source-grounded description is useful but the role is missing or generic. Re-read README and source evidence; choose a matching canonical role first, otherwise a specific snake_case semantic concept. TEXT is a physical type, not a semantic role. Keep the original sql_type exactly. Return only this one target, same seven-field contract, no relationships. If evidence is insufficient keep null roles; do not guess or invent values.'}}
+    # Keep the remaining original chunk columns as source context, correctly named.
+    request['refinement_neighbor_columns'] = [
+        {'name': n, 'description': payload['target_descriptions'].get(n, ''),
+         'samples': p['samples'][:2]}
+        for n, p in zip(payload['target_columns'], payload['profiles']) if n != name]
+    # Keep only this target's header references; retain all selected README/rules.
+    allowed_refs = {k: v for k, v in references.items()
+                    if v['source'] != 'header' or v['quote'] == name}
+    request['evidence_catalog'] = list(allowed_refs.values())
+    request['semantic_refinement']['target_header_evidence_ids'] = [
+        k for k, v in allowed_refs.items() if v['source'] == 'header']
+    request.pop('contract_retry', None)
+    request.pop('format_retry', None)
+    try:
+        value, error = model.complete(request, audit_path)
+    except ValueError as exc:
+        if 'context exceeds budget' not in str(exc):
+            raise
+        audit.update(reason='refinement_context_budget', error=str(exc))
+        return original
+    try:
+        if error:
+            raise ValueError(error)
+        if not isinstance(value, dict) or set(value) != {'columns', 'grain', 'relationships', 'handling'}:
+            raise ValueError('Invalid refinement response contract')
+        if not isinstance(value['columns'], list) or len(value['columns']) != 1:
+            raise ValueError('Refinement must return exactly one target')
+        entry = value['columns'][0]
+        if not isinstance(entry, list) or len(entry) != 7 or entry[0] != name:
+            raise ValueError('Refinement changed target column')
+        _, role, semantic_role, typ, meaning, unit, reference = entry
+        if typ != proposal['sql_type']:
+            raise ValueError('Refinement may not change physical type')
+        if not isinstance(reference, str) or reference not in allowed_refs:
+            raise ValueError('Unknown refinement evidence reference')
+        if not isinstance(value['handling'], str) or not isinstance(value['grain'], str) or not isinstance(value['relationships'], list):
+            raise ValueError('Invalid refinement metadata types')
+        source_ref = allowed_refs[reference]
+        refined = {'column': name, 'role': 'other' if role is None else 'text' if role == 'unresolved' else role,
+            'semantic_role': semantic_role, 'sql_type': typ, 'meaning': meaning or '',
+            'unit': unit, 'handling': value['handling'],
+            'status': 'unresolved' if role == 'unresolved' else 'proposed',
+            'evidence': [{'source': source_ref['source'], 'quote': source_ref['quote']}]}
+        candidate = validate_column(column, refined, profile, readme, rules)
+        audit['candidate_proposal'] = refined
+        audit['candidate_checks'] = candidate['semantic']['checks']
+        if candidate['semantic']['status'] not in {'applied_candidate', 'described_other'} or (
+                candidate['canonical_role'] is None and candidate['semantic_role'] is None):
+            audit['reason'] = 'candidate_failed_validation_or_no_specific_role'
+            return original
+        audit.update(accepted=True, reason='specific_role_validated')
+        candidate['semantic']['refinement'] = audit
+        candidate['semantic']['evidence_reference'] = source_ref
+        return candidate
+    except (ValueError, TypeError, KeyError) as exc:
+        audit.update(reason='refinement_failed_contract', error=str(exc))
+        return original
 
 
 def guard_role_collisions(columns,baselines):
@@ -271,7 +435,36 @@ def guard_role_collisions(columns,baselines):
                 column['sql_type']=baseline['sql_type']
                 audit['checks'].append('physical_type_reverted_due_to_role_specific_parser')
             else:audit['checks'].append('validated_physical_type_retained_without_role_override')
-    return columns
+    return [attach_roles(c) for c in columns]
+
+
+def guard_refinement_collisions(columns, baselines, readme, rules):
+    """Refinement cannot displace an initially usable operational mapping."""
+    initial = []
+    for col, baseline in zip(columns, baselines):
+        audit = col['semantic'].get('refinement', {})
+        if audit.get('accepted'):
+            initial.append(validate_column(baseline, audit['initial_proposal'],
+                                           col['source_profile'], readme, rules))
+        else:
+            initial.append(deepcopy(col))
+    initial = guard_role_collisions(initial, baselines)
+    occupied = Counter(c['role'] for c in initial if c['role'] not in {'text', 'money'})
+    new = Counter(c['role'] for c in columns
+                  if c['semantic'].get('refinement', {}).get('accepted')
+                  and c['role'] not in {'text', 'money'})
+    result = []
+    for col, original in zip(columns, initial):
+        audit = col['semantic'].get('refinement', {})
+        if audit.get('accepted') and col['role'] in new and (
+                occupied[col['role']] or new[col['role']] > 1):
+            audit = deepcopy(audit)
+            audit.update(accepted=False, reason='refinement_operational_role_collision')
+            original['semantic']['refinement'] = audit
+            result.append(original)
+        else:
+            result.append(col if audit.get('accepted') else original)
+    return guard_role_collisions(result, baselines)
 
 
 def revalidate_semantic_plan(plan,business,*,rulebook,calendar):
@@ -300,7 +493,7 @@ def revalidate_semantic_plan(plan,business,*,rulebook,calendar):
                 spec={**baseline,'source_profile':old['source_profile'],'semantic':deepcopy(audit)}
             else:
                 spec=validate_column(baseline,audit.get('proposed'),old['source_profile'],readme,rules)
-                for key_name in ('evidence_reference','model_error'):
+                for key_name in ('evidence_reference','model_error','refinement'):
                     if key_name in audit:spec['semantic'][key_name]=deepcopy(audit[key_name])
             reviewed.append(spec)
         table['columns']=guard_role_collisions(reviewed,table['baseline_columns'])
@@ -343,6 +536,10 @@ class LocalSemanticModel:
                 'evidence_catalog':[[e['id'],e['source'],e['quote']] for e in payload['evidence_catalog']],
                 'context_compaction':'Evidence entries are [id, source, exact_text]; duplicated source text removed, no excerpts truncated.'}
             if fits(compact):return compact
+            for count in range(len(compact.get('related_table_context', []))-1, -1, -1):
+                reduced={**compact, 'related_table_context':compact['related_table_context'][:count],
+                    'context_compaction':compact['context_compaction']+' Optional related-table sample context reduced for token budget; complete related table/column inventory retained.'}
+                if fits(reduced):return reduced
         raise ValueError('Semantic context exceeds budget even after lossless source deduplication')
 
     def complete(self, payload, audit_path):
@@ -379,9 +576,9 @@ class LocalSemanticModel:
         with Path(audit_path).open('a', encoding='utf-8') as stream:
             stream.write(dumps({**record, 'cache_hit': cache_hit, 'parse_error': error,
                                 'model': self.model.metadata()})+'\n')
-        if error and not payload.get('format_retry'):
+        if error and not payload.get('format_retry') and not payload.get('semantic_refinement'):
             return self.complete({**payload,'format_retry':{'error':error,
-                'instruction':'Regenerate the required JSON from the original sources. Follow the exact six-field array example; do not add explanations.'}},audit_path)
+                'instruction':'Regenerate the required JSON from the original sources. Follow the exact seven-field array contract; do not add explanations.'}},audit_path)
         return value, error
 
 
@@ -409,7 +606,9 @@ def build_semantic_plan(business, output_dir, *, rulebook, calendar, model, csv_
     audit_path = output/'model_calls.jsonl'
     plan = {'version': SEMANTIC_VERSION, 'business_id': business.name, 'sources': before,
             'model': model.identity, 'headers': {}, 'tables': {}, 'questions_read': False,
-            'answers_read': False, 'limitations': ['SLM semantics and joins remain source-grounded candidates; structural validation is not business proof.']}
+            'answers_read': False,
+            'refinement_policy': {'version': REFINEMENT_VERSION, 'max_extra_requests_per_eligible_column': 1,
+                'alias_learning': False, 'change_initial_proposed_type': False}, 'limitations': ['SLM semantics and joins remain source-grounded candidates; structural validation is not business proof.']}
     def resolve(table, preview, _):
         payload = {'task': 'header', 'source_file': table.path.name, 'source_table': table.name,
                    'rows': [{'row': r.number, 'values': r.values} for r in preview], 'readme': readme,
@@ -444,12 +643,20 @@ def build_semantic_plan(business, output_dir, *, rulebook, calendar, model, csv_
                     profile.add(row['values'][i], year=layout['year_evidence'], cell=row['cells'].get(str(i)))
     related = [{'table': name, 'columns': [c['original_name'] for c in group['layout']['columns']]}
                for name, group in groups.items()]
+    business_context = []
+    for table_name, item in groups.items():
+        business_context.append({'table': table_name, 'table_role': item['layout']['role'],
+            'columns': [{'name': c['original_name'], 'role': c['role'],
+                         'type': c['sql_type'], 'description': c['description'],
+                         'samples': profile.finish()['samples'][:2],
+                         'has_data': bool(profile.counts['non_empty'])}
+                        for c, profile in zip(item['layout']['columns'], item['profiles'])]})
     for name, group in groups.items():
         layout = group['layout']; profiles = [p.finish() for p in group['profiles']]
         columns = layout['columns']
-        # Unknown and generic monetary fields get proposals; aliases remain visible context.
-        targets = [c['original_name'] for c in columns if c['role'] in {'text', 'money'}]
-        proposed = {}; proposed_refs = {}; errors = []; grains = []; raw_relationships = []
+        # Canonical mappings are complete; only genuinely unmapped source fields need SLM.
+        targets = [c['original_name'] for c in columns if c['role']=='text' and c['evidence']=='preserved_text']
+        proposed = {}; proposed_refs = {}; target_context = {}; errors = []; grains = []; raw_relationships = []
         for offset in range(0,len(targets),5):
             chunk=targets[offset:offset+5]
             selected_rules=relevant_rules(rules,[c for c in columns if c['original_name'] in chunk])
@@ -459,47 +666,72 @@ def build_semantic_plan(business, output_dir, *, rulebook, calendar, model, csv_
             evidence_catalog.extend({'id':f'B{i}','source':'rulebook','quote':paragraph,'location':f'selected_rule_paragraph:{i}'}
                                     for i,paragraph in enumerate(selected_rules.split('\n\n')) if paragraph.strip())
             references={entry['id']:entry for entry in evidence_catalog}
+            terms=set(key(n) for n in chunk)
+            ranked=sorted((t for t in business_context if t['table']!=name),
+                key=lambda t: -sum(key(c['name']) in terms for c in t['columns']))
+            selected_context=[]; context_size=0
+            for context in ranked:
+                size=len(dumps(context))
+                if len(selected_context)<3 and context_size+size<=6000:
+                    selected_context.append(context);context_size+=size
             payload = {'task': 'columns', 'source_table': name, 'source_parts': group['parts'],
-                       'roles': sorted(ROLES), 'role_definitions':ROLE_DEFINITIONS, 'target_columns': chunk,
+                       'roles': sorted(ALIASES), 'role_definitions':ROLE_DEFINITIONS,
+                       'canonical_aliases':{r:a.split('|')[:3] for r,a in ALIASES.items()},
+                       'alias_scope':'First three name examples per canonical role; full aliases applied by rule-based stage; match meaning, not spelling only.',
+                       'target_columns': chunk,
                        'target_descriptions': {c['original_name']:c['description'] for c in columns if c['original_name'] in chunk},
-                       'context_columns': [{k:c[k] for k in ('original_name','role','sql_type','description')}
-                                           for c in columns if c['original_name'] not in chunk],
+                       'context_columns': [{**{k:c[k] for k in ('original_name','role','sql_type','description')},
+                                            'samples':p['samples'][:2], 'has_data':bool(p['non_empty'])}
+                                           for c,p in zip(columns,profiles) if c['original_name'] not in chunk],
                        'profiles': [p for c,p in zip(columns,profiles) if c['original_name'] in chunk],
-                       'related_tables': related, 'readme': readme,
+                       'related_tables': related, 'related_table_context': selected_context,
+                       'related_context_scope': 'up_to_3_tables_ranked_by_shared_headers_with_6000_character_budget',
+                       'readme': readme,
                        'rulebook': selected_rules, 'evidence_catalog':evidence_catalog,
                        'rulebook_context_scope':'selected_whole_paragraphs_by_column_terms_not_questions',
                        'source_fingerprint': before}
-            value, chunk_error = model.complete(payload, audit_path)
-            try:
-                if chunk_error: raise ValueError(chunk_error)
-                if set(value) != {'columns', 'grain', 'relationships','handling'} or not isinstance(value['columns'], list):
-                    raise ValueError('Invalid semantic response contract')
-                part={}; part_refs={}
-                for entry in value['columns']:
-                    if not isinstance(entry,list) or len(entry)!=6:raise ValueError('Expected six-field compact proposal')
-                    col_name,role,typ,meaning,unit,reference=entry
-                    if not isinstance(col_name,str) or col_name not in chunk or col_name in part:
-                        raise ValueError('Unknown or duplicate proposed column')
-                    if not isinstance(reference,str) or reference not in references:
-                        raise ValueError('Unknown evidence reference')
-                    source_ref=references[reference]
-                    part_refs[col_name]=source_ref
-                    part[col_name]={'column':col_name,'role':'text' if role=='unresolved' else role,
-                        'sql_type':typ,'meaning':meaning,'unit':unit,'handling':value['handling'],
-                        'status':'unresolved' if role=='unresolved' else 'proposed',
-                        'evidence':[{'source':source_ref['source'],'quote':source_ref['quote']}]}
-                if set(part)!=set(chunk):raise ValueError('Missing column proposals')
-                if not isinstance(value['grain'], str) or not isinstance(value['relationships'], list) or not isinstance(value['handling'],str):
-                    raise ValueError('Invalid grain/relationship contract')
-                proposed.update(part);proposed_refs.update(part_refs);grains.append(value['grain']);raw_relationships.extend(value['relationships'])
-            except (ValueError, TypeError, KeyError) as exc:
-                errors.append(str(exc))
+            for target in chunk:
+                target_context[target] = (payload, references)
+            for contract_attempt in range(2):
+                value, chunk_error = model.complete(payload, audit_path)
+                try:
+                    if chunk_error: raise ValueError(chunk_error)
+                    if set(value) != {'columns', 'grain', 'relationships','handling'} or not isinstance(value['columns'], list):
+                        raise ValueError('Invalid semantic response contract')
+                    part={}; part_refs={}
+                    for entry in value['columns']:
+                        if not isinstance(entry,list) or len(entry)!=7:raise ValueError('Expected seven-field compact proposal')
+                        col_name,role,semantic_role,typ,meaning,unit,reference=entry
+                        role='other' if role is None else role
+                        if not isinstance(col_name,str) or col_name not in chunk or col_name in part:
+                            raise ValueError('Unknown or duplicate proposed column')
+                        if not isinstance(reference,str) or reference not in references:
+                            raise ValueError('Unknown evidence reference')
+                        source_ref=references[reference]
+                        part_refs[col_name]=source_ref
+                        part[col_name]={'column':col_name,'role':'text' if role=='unresolved' else role,
+                            'semantic_role':semantic_role,'sql_type':typ,'meaning':meaning or '', 'unit':unit,'handling':value['handling'],
+                            'status':'unresolved' if role=='unresolved' else 'proposed',
+                            'evidence':[{'source':source_ref['source'],'quote':source_ref['quote']}]}
+                    if set(part)!=set(chunk):raise ValueError('Missing column proposals')
+                    if not isinstance(value['grain'], str) or not isinstance(value['relationships'], list) or not isinstance(value['handling'],str):
+                        raise ValueError('Invalid grain/relationship contract')
+                    proposed.update(part);proposed_refs.update(part_refs);grains.append(value['grain']);raw_relationships.extend(value['relationships'])
+                    break
+                except (ValueError, TypeError, KeyError) as exc:
+                    if contract_attempt == 0:
+                        payload={**payload,'contract_retry':{'error':str(exc),
+                            'required_target_columns_only':chunk,
+                            'instruction':'Return exactly these target names in order, seven fields each. Exclude all context columns. Use canonical roles only in canonical_role; semantic_role must describe a specific distinct concept or null. If uncertain use null, never guess to satisfy the format.'}}
+                    else:errors.append(str(exc))
         error='; '.join(errors) if errors else None
         reviewed = []
         for column, profile in zip(columns, profiles):
             if column['original_name'] in targets:
-                spec = validate_column(column, proposed.get(column['original_name']), profile, readme, rules)
-                if column['original_name'] in proposed_refs:spec['semantic']['evidence_reference']=proposed_refs[column['original_name']]
+                target_payload, references = target_context[column['original_name']]
+                spec = refine_column(column, proposed.get(column['original_name']), profile, readme, rules,
+                    model=model, payload=target_payload, references=references, audit_path=audit_path)
+                if column['original_name'] in proposed_refs:spec['semantic'].setdefault('evidence_reference',proposed_refs[column['original_name']])
                 if error and column['original_name'] not in proposed: spec['semantic']['model_error'] = error
             else:
                 spec = {**column, 'source_profile': profile, 'semantic': {
@@ -516,7 +748,7 @@ def build_semantic_plan(business, output_dir, *, rulebook, calendar, model, csv_
                     all(c in target['columns'] for c in target_cols)) and evidence_valid(
                     relation.get('evidence'), ' '.join(c['original_name'] for c in columns), readme, rules):
                 relationships.append({**relation, 'status': 'proposed_not_join_verified'})
-        reviewed=guard_role_collisions(reviewed,columns)
+        reviewed=guard_refinement_collisions(reviewed,columns,readme,rules)
         plan['tables'][name] = {'columns': reviewed, 'source_parts': group['parts'],
                 'grain_candidate': '; '.join(dict.fromkeys(grains)) if grains else 'unknown',
                 'relationship_proposals': relationships, 'model_error': error,

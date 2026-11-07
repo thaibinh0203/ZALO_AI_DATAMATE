@@ -4,6 +4,7 @@ __pycache__/
 .cache/
 models/
 outputs/
+# Commit only compact final reports under artifacts/data_pipeline_final.
 *.safetensors
 *.bin
 *.gguf
@@ -46,3 +47,6 @@ outputs/
 /docs/public_test/calendar.csv
 /artifacts/data_split_v1/inputs/
 /artifacts/data_split_v1/evaluator/
+
+# Temporary experiment/rollback snapshots
+/artifacts/refinement_experiment_v*/

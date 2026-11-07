@@ -12,7 +12,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'src'))
 from datamate_data.normalization import column_spec
 from datamate_data.pipeline import prepare_business
-from datamate_data.semantic import ColumnProfile,LocalSemanticModel,build_semantic_plan,validate_column,guard_role_collisions,revalidate_semantic_plan
+from datamate_data.semantic import ColumnProfile,LocalSemanticModel,build_semantic_plan,validate_column,guard_role_collisions,revalidate_semantic_plan,refine_column,guard_refinement_collisions
 
 
 def proposal(name, role='other', typ='TEXT', **changes):
@@ -32,7 +32,10 @@ class FakeSemanticModel:
         roles={'Phiếu chốt':('order_id','TEXT'),'Ngày ghi nhận':('date','DATE'),
                'Tên vật tư':('product_name','TEXT'),'Lượng xuất':('quantity','NUMERIC'),
                'Tiền ròng':('line_amount','NUMERIC')}
-        columns=[[n,*roles.get(n,('other','TEXT')),'Synthetic meaning',None,f'H{i}'] for i,n in enumerate(payload['target_columns'])]
+        columns=[[n,roles.get(n,(None,'TEXT'))[0],
+                  'source_annotation' if n not in roles else None,
+                  roles.get(n,(None,'TEXT'))[1],'Synthetic meaning',None,f'H{i}']
+                 for i,n in enumerate(payload['target_columns'])]
         return {'columns':columns,'grain':'Synthetic row','relationships':[],'handling':'Preserve source'},None
 
 
@@ -178,7 +181,7 @@ class SemanticIntegration(unittest.TestCase):
             def complete(self,payload,audit):
                 value,error=super().complete(payload,audit)
                 for entry in value['columns']:
-                    if entry[0]=='Alternate count':entry[1:3]=['base_quantity','NUMERIC']
+                    if entry[0]=='Alternate count':entry[1:4]=['base_quantity',None,'NUMERIC']
                 return value,error
         source=self.business/'export.csv'
         source.write_text('Tên hàng,Số lượng quy đổi,Alternate count,ĐVT\nNước,24,2,thùng\n')
@@ -280,6 +283,275 @@ class SemanticCacheTests(unittest.TestCase):
             record=json.loads((root/'calls.jsonl').read_text())
             self.assertIsNone(record['raw_output'])
             self.assertIn('RuntimeError',record['generation_error'])
+
+
+class DualRoleGates(unittest.TestCase):
+    profile = SemanticGates.profile
+
+    def test_free_semantic_role_preserves_internal_operand(self):
+        name='Mốc đăng ký'
+        result=validate_column(column_spec(name),proposal(name, semantic_role='customer_created_at',
+            typ='TIMESTAMP',meaning='Thời điểm tạo hồ sơ khách hàng'),
+            self.profile(name,['2025-01-01 10:30:00']),'','')
+        self.assertIsNone(result['canonical_role'])
+        self.assertEqual(result['semantic_role'],'customer_created_at')
+        self.assertEqual(result['sql_type'],'TIMESTAMP')
+        self.assertTrue(result['has_data'])
+        self.assertEqual(result['role'],'text')
+
+    def test_unknown_is_unresolved_not_described(self):
+        name='Thông tin phụ'
+        result=validate_column(column_spec(name),proposal(name,meaning='unknown'),self.profile(name,['x']),'','')
+        self.assertEqual(result['semantic']['status'],'unresolved')
+        self.assertIsNone(result['canonical_role'])
+        self.assertIsNone(result['semantic_role'])
+
+    def test_empty_column_can_have_meaning_without_values(self):
+        name='Bảo hành'
+        result=validate_column(column_spec(name),proposal(name,semantic_role='product_warranty',
+            meaning='Thông tin bảo hành sản phẩm'),self.profile(name,[None,'']),'','')
+        self.assertEqual(result['semantic_role'],'product_warranty')
+        self.assertFalse(result['has_data'])
+        self.assertEqual(result['sql_type'],'TEXT')
+        self.assertNotIn('data_status',result)
+        self.assertNotIn('non_null_count',result)
+
+    def test_existing_mapping_only_has_canonical_role(self):
+        from datamate_data.semantic import attach_roles
+        spec=column_spec('Ngày bán');spec['semantic']={'status':'existing_mapping'}
+        result=attach_roles(spec)
+        self.assertEqual(result['canonical_role'],'date')
+        self.assertIsNone(result['semantic_role'])
+
+    def test_constant_boolean_is_not_empty(self):
+        name='Đang kinh doanh'
+        result=validate_column(column_spec(name),proposal(name,typ='BOOLEAN',
+            semantic_role='product_active_flag',meaning='Cờ sản phẩm đang kinh doanh'),
+            self.profile(name,[True,True]),'','')
+        self.assertEqual(result['sql_type'],'BOOLEAN')
+        self.assertTrue(result['has_data'])
+
+    def test_generic_semantic_role_is_rejected(self):
+        name='Thông tin phụ'
+        result=validate_column(column_spec(name),proposal(name,semantic_role='unknown'),self.profile(name,['x']),'','')
+        self.assertEqual(result['semantic']['status'],'unresolved')
+
+
+class DualRoleContext(unittest.TestCase):
+    setUp = SemanticIntegration.setUp
+    tearDown = SemanticIntegration.tearDown
+    plan = SemanticIntegration.plan
+
+    def test_seven_field_output_and_business_context(self):
+        class SevenFieldModel(FakeSemanticModel):
+            def complete(self,payload,audit):
+                if payload['task']=='header':return super().complete(payload,audit)
+                self.calls.append(payload)
+                entries=[[n,None,'source_annotation','TEXT','Ghi chú từ nguồn',None,f'H{i}']
+                         for i,n in enumerate(payload['target_columns'])]
+                return {'columns':entries,'grain':'Source rows','relationships':[],'handling':'Preserve source'},None
+        (self.business/'export.csv').write_text('Chú thích phụ,Ngày\na,2025-01-01\n')
+        (self.business/'products.csv').write_text('Tên sản phẩm,Nhóm\nA,Vật tư\n')
+        worker=SevenFieldModel();plan=self.plan(worker)
+        self.assertTrue(worker.calls)
+        self.assertTrue(worker.calls[0]['related_table_context'])
+        self.assertIn('samples',worker.calls[0]['related_table_context'][0]['columns'][0])
+        columns=[c for t in plan['tables'].values() for c in t['columns']]
+        self.assertTrue(any(c.get('semantic_role')=='source_annotation' for c in columns))
+
+
+    def test_extra_context_columns_retry_once(self):
+        class Recovering(FakeSemanticModel):
+            def complete(self,payload,audit):
+                value,error=super().complete(payload,audit)
+                if not payload.get('contract_retry'):
+                    value['columns'].append(['Not a target',None,'source_annotation','TEXT','Context only',None,'H0'])
+                return value,error
+        (self.business/'export.csv').write_text('Chú thích phụ,Ngày\na,2025-01-01\n')
+        worker=Recovering();plan=self.plan(worker)
+        self.assertEqual(len(worker.calls),2)
+        self.assertEqual(plan['model_error_tables'],0)
+        self.assertEqual(worker.calls[1]['contract_retry']['required_target_columns_only'],['Chú thích phụ'])
+
+
+    def test_bad_semantic_label_only_blocks_its_own_column(self):
+        class OneBadRole(FakeSemanticModel):
+            def complete(self,payload,audit):
+                value,error=super().complete(payload,audit)
+                value['columns'][0][2]='text'
+                return value,error
+        (self.business/'export.csv').write_text('Chú thích phụ,Diễn giải phụ,Ngày\na,b,2025-01-01\n')
+        worker=OneBadRole();plan=self.plan(worker)
+        columns=next(iter(plan['tables'].values()))['columns']
+        self.assertEqual(columns[0]['semantic']['status'],'unresolved')
+        self.assertEqual(columns[0]['semantic']['proposed']['meaning'],'Synthetic meaning')
+        self.assertEqual(columns[1]['semantic_role'],'source_annotation')
+        self.assertEqual(plan['model_error_tables'],0)
+        self.assertEqual(len(worker.calls),2)
+        self.assertFalse(columns[0]['semantic']['refinement']['accepted'])
+
+
+
+class CanonicalFirstGates(unittest.TestCase):
+    profile = SemanticGates.profile
+
+    def test_canonical_in_semantic_field_promoted_with_original_retained(self):
+        name='Lượng giao thực tế'
+        value=proposal(name,typ='NUMERIC',semantic_role='quantity',meaning='Số lượng giao')
+        result=validate_column(column_spec(name),value,self.profile(name,['2','3']),'','')
+        self.assertEqual(result['canonical_role'],'quantity')
+        self.assertIsNone(result['semantic_role'])
+        self.assertEqual(result['semantic']['proposed']['semantic_role'],'quantity')
+        self.assertIn('canonical_role_promoted_from_semantic_role',result['semantic']['checks'])
+        self.assertEqual(value['semantic_role'],'quantity')
+
+    def test_alias_spelling_in_semantic_field_resolves_to_canonical(self):
+        name='Tình hình đơn'
+        result=validate_column(column_spec(name),proposal(name,semantic_role='Trạng thái đơn hàng',
+            meaning='Trạng thái của đơn hàng'),self.profile(name,['đang gửi']),'','')
+        self.assertEqual(result['canonical_role'],'status')
+        self.assertIsNone(result['semantic_role'])
+        self.assertEqual(result['semantic']['status'],'applied_candidate')
+
+    def test_status_does_not_require_full_value_vocabulary(self):
+        name='Tình hình đơn'
+        result=validate_column(column_spec(name),proposal(name,'status',meaning='Trạng thái đơn'),
+            self.profile(name,['Không giao được','Đã hoàn thành']),'','')
+        self.assertEqual(result['canonical_role'],'status')
+        self.assertEqual(result['semantic']['status'],'applied_candidate')
+
+    def test_promoted_role_still_requires_full_numeric_parse(self):
+        name='Lượng giao thực tế'
+        result=validate_column(column_spec(name),proposal(name,typ='NUMERIC',semantic_role='quantity'),
+            self.profile(name,['2','bad']),'','')
+        self.assertIsNone(result['canonical_role'])
+        self.assertIn('full_column_parse_failed:1/2',result['semantic']['checks'])
+
+    def test_disagreeing_canonical_fields_not_arbitrarily_selected(self):
+        name='Lượng giao thực tế'
+        result=validate_column(column_spec(name),proposal(name,'quantity','NUMERIC',semantic_role='line_amount'),
+            self.profile(name,['2']),'','')
+        self.assertIn('conflicting_canonical_role_fields',result['semantic']['checks'])
+
+    def test_readme_description_matches_existing_alias(self):
+        spec=column_spec('Cờ theo dõi','trạng thái đơn hàng')
+        self.assertEqual(spec['role'],'status')
+        self.assertEqual(spec['evidence'],'readme')
+        self.assertEqual(column_spec('Trạng thái xử lý')['role'],'status')
+
+
+class CanonicalFirstIntegration(unittest.TestCase):
+    setUp = SemanticIntegration.setUp
+    tearDown = SemanticIntegration.tearDown
+    plan = SemanticIntegration.plan
+    prepare = SemanticIntegration.prepare
+
+    def test_rule_based_canonical_not_sent_to_model_and_unknown_status_retained(self):
+        (self.business/'export.csv').write_text('Cờ theo dõi,Tổng tiền\nKhông giao được,10\n')
+        (self.business/'README.md').write_text('## Cột trong `export.csv`\n- **Cờ theo dõi**: trạng thái đơn hàng\n')
+        model=FakeSemanticModel();plan=self.plan(model)
+        self.assertEqual(model.calls,[])
+        catalog=self.prepare(plan);table=next(iter(catalog['tables'].values()))
+        status=table['columns'][0]
+        self.assertEqual(status['canonical_role'],'status')
+        self.assertIsNone(status['semantic_role'])
+        row=json.loads((self.root/'prepared'/table['data_path']).read_text().splitlines()[0])
+        self.assertEqual(row['typed'][0],'Không giao được')
+        self.assertEqual(row['quality']['notes'][status['name']]['status'],'unmapped_status_preserved')
+
+
+
+class BoundedRefinementTests(unittest.TestCase):
+    profile = SemanticGates.profile
+
+    def execute_refinement(self, *, typ='TEXT', reference='H3', semantic_role='phone_number',
+                           initial_meaning='Số điện thoại liên hệ', initial_semantic='text', error=None):
+        name='Số liên lạc';spec=column_spec(name);profile=self.profile(name,['0900123456'])
+        initial=proposal(name,meaning=initial_meaning,semantic_role=initial_semantic)
+        payload={'task':'columns','target_columns':['Thông tin khác',name],
+            'target_descriptions':{'Thông tin khác':'','Số liên lạc':''},
+            'profiles':[self.profile('Thông tin khác',['x']),profile]}
+        refs={'H3':{'id':'H3','source':'header','quote':name,'location':name}}
+        calls=[]
+        def complete(request,path):
+            calls.append(request)
+            return {'columns':[[name,None,semantic_role,typ,'Thông tin liên hệ',None,reference]],
+                    'grain':'One source row','relationships':[],'handling':'Preserve source'},error
+        result=refine_column(spec,initial,profile,'','',model=SimpleNamespace(complete=complete),
+            payload=payload,references=refs,audit_path=Path('/tmp/synthetic_refinement_unused.jsonl'))
+        return result,initial,calls
+
+    def test_generic_role_refined_once_with_original_evidence_and_audit(self):
+        from datamate_data.normalization import ALIASES
+        before=dict(ALIASES)
+        result,initial,calls=self.execute_refinement()
+        self.assertEqual(result['semantic_role'],'phone_number')
+        self.assertEqual(len(calls),1)
+        self.assertEqual(calls[0]['target_columns'],['Số liên lạc'])
+        self.assertEqual(len(calls[0]['profiles']),1)
+        self.assertEqual(calls[0]['refinement_neighbor_columns'][0]['name'],'Thông tin khác')
+        self.assertEqual(result['semantic']['refinement']['initial_proposal'],initial)
+        self.assertTrue(result['semantic']['refinement']['accepted'])
+        self.assertEqual(result['semantic']['evidence_reference']['id'],'H3')
+        self.assertEqual(ALIASES,before)
+
+    def test_refinement_cannot_change_proposed_physical_type(self):
+        result,initial,calls=self.execute_refinement(typ='NUMERIC')
+        self.assertEqual(result['sql_type'],'TEXT')
+        self.assertEqual(result['semantic']['proposed'],initial)
+        self.assertIsNone(result['semantic_role'])
+        self.assertEqual(len(calls),1)
+
+    def test_unknown_reference_keeps_original_without_retry(self):
+        result,initial,calls=self.execute_refinement(reference='MADE_UP')
+        self.assertEqual(result['semantic']['proposed'],initial)
+        self.assertEqual(len(calls),1)
+        self.assertFalse(result['semantic']['refinement']['accepted'])
+
+    def test_still_generic_role_preserves_original(self):
+        result,initial,calls=self.execute_refinement(semantic_role='text')
+        self.assertEqual(result['semantic']['proposed'],initial)
+        self.assertEqual(len(calls),1)
+        self.assertEqual(result['semantic']['checks'],['invalid_semantic_role'])
+
+    def test_already_valid_semantic_role_is_not_refined(self):
+        result,initial,calls=self.execute_refinement(initial_semantic='phone_number')
+        self.assertEqual(calls,[])
+        self.assertNotIn('refinement',result['semantic'])
+
+    def test_unknown_meaning_is_not_forced_into_a_role(self):
+        result,initial,calls=self.execute_refinement(initial_meaning='unknown')
+        self.assertEqual(calls,[])
+        self.assertIsNone(result['semantic_role'])
+
+    def test_parse_error_keeps_original_and_does_not_retry(self):
+        result,initial,calls=self.execute_refinement(error='Synthetic parse error')
+        self.assertEqual(result['semantic']['proposed'],initial)
+        self.assertEqual(len(calls),1)
+
+    def test_model_complete_disables_json_retry_for_refinement(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);worker=SemanticCacheTests().worker(root,['bad-json'])
+            value,error=worker.complete({'task':'fixture','semantic_refinement':{'version':'synthetic'}},root/'calls.jsonl')
+            self.assertIsNotNone(error)
+            self.assertEqual(worker.calls,1)
+            self.assertEqual(len((root/'calls.jsonl').read_text().splitlines()),1)
+
+
+    def test_refinement_cannot_displace_valid_sibling_mapping(self):
+        a='Lượng giao chốt';b='Chỉ số phụ'
+        bases=[column_spec(a),column_spec(b)]
+        good=validate_column(bases[0],proposal(a,'quantity','NUMERIC'),self.profile(a,['2']),'','')
+        original=proposal(b,typ='NUMERIC',semantic_role='text')
+        changed=validate_column(bases[1],proposal(b,'quantity','NUMERIC'),self.profile(b,['3']),'','')
+        changed['semantic']['refinement']={'accepted':True,'initial_proposal':original}
+        result=guard_refinement_collisions([good,changed],bases,'','')
+        self.assertEqual(result[0]['canonical_role'],'quantity')
+        self.assertEqual(result[0]['semantic']['status'],'applied_candidate')
+        self.assertIsNone(result[1]['canonical_role'])
+        self.assertEqual(result[1]['semantic']['proposed'],original)
+        self.assertFalse(result[1]['semantic']['refinement']['accepted'])
+        self.assertEqual(result[1]['semantic']['refinement']['reason'],'refinement_operational_role_collision')
 
 
 if __name__=='__main__':unittest.main()
