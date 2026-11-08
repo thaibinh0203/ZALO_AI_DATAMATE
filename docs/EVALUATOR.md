@@ -162,7 +162,7 @@ scorer, không phải predictions của model; không lưu chúng thành submiss
 đánh giá model. Việc validate format 3.000 references cũng không phải holdout run.
 
 CLI smoke thật dùng file prediction rỗng trên development: 708 abstain, PA=0,
-coverage=0. Report tại `outputs/evaluator_smoke/all_abstain_development_final/`.
+coverage=0. Output smoke này đã được xóa khi dọn workspace v2; có thể chạy lại evaluator với fixture riêng khi cần.
 Đây là kiểm tra evaluator, chưa có điểm baseline model trên data thật ở lượt này.
 
 Code: `src/datamate_eval/{matching,runner}.py`, `scripts/evaluate.py`.

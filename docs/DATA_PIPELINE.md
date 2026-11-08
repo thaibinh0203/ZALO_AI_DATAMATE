@@ -1,10 +1,12 @@
 # Data pipeline — bản refinement đã chốt
 
+Bổ sung metadata grain/measure/group keys/JOIN: dùng `--business-metadata` khi ingest hoặc enrich output hiện có bằng `scripts/prepare_business_metadata.py`. Xem [BASELINE_GROUNDED.md](BASELINE_GROUNDED.md). Metadata được lưu riêng, không sửa canonical/semantic role đã chốt.
+
 Luồng: CSV/XLSX/SQLite → parser → adapter → profile toàn cột → canonical mapping → SLM cho cột chưa rõ → refinement tối đa một lượt/cột đủ điều kiện → validator → chuẩn hóa → PostgreSQL.
 
 ## Output hiện tại
 
-- Local: `outputs/data_pipeline/train`; logs kiểm tra: `outputs/data_pipeline/checks`.
+- Local: `outputs/data_pipeline/train`; kết quả kiểm tra: `train/database_validation.json`. Dữ liệu development cho baseline v2 nằm tại `outputs/data_pipeline/development_v1`.
 - Bộ nhỏ để commit Git: [artifacts/data_pipeline_final](../artifacts/data_pipeline_final/README.md), gồm schema không có giá trị dòng, review từng business, thống kê và kết quả kiểm chứng.
 - [Luồng canonical-first](CANONICAL_FIRST_PIPELINE.md), [refinement](BOUNDED_REFINEMENT_EXPERIMENT.md), [validation](DATA_PIPELINE_VALIDATION.json).
 

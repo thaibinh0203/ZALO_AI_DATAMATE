@@ -27,6 +27,7 @@ def main():
     parser.add_argument('--output-dir',type=Path,required=True)
     parser.add_argument('--csv-encoding',default='utf-8-sig')
     parser.add_argument('--prepare-only',action='store_true',help='Create normalized staging/catalog without a server')
+    parser.add_argument('--business-metadata',action='store_true',help='Add source-grounded grain/measure/key/join sidecar after PostgreSQL loading')
     parser.add_argument('--semantic-mode',choices=['local','none'],default='local',
                         help='local: offline Qwen3 proposals + validation; none: deterministic baseline')
     parser.add_argument('--semantic-model-path',type=Path,default=ROOT/'models/qwen3-4b')
@@ -35,6 +36,8 @@ def main():
     parser.add_argument('--semantic-plan-root',type=Path,
                         help='Reuse source-identical local profiles/plans, revalidate with current gates, no new inference')
     args=parser.parse_args();started=perf_counter()
+    if args.business_metadata and (args.prepare_only or args.semantic_plan_root or args.semantic_mode!='local'):
+        parser.error('Business metadata requires local model and PostgreSQL loading; enrich existing catalogs separately otherwise')
     if args.semantic_plan_root and args.semantic_mode!='local':parser.error('Plan reuse requires semantic-mode local')
     source=args.source_root.resolve();output=args.output_dir.resolve()
     if output.exists():parser.error('Output directory already exists; use a new run path')
@@ -101,6 +104,10 @@ def main():
                 from datamate_data.postgres import load_business
                 loaded=load_business(os.environ['DATAMATE_PG_DSN'],prepared)
                 item.update(database_loaded=True,cache_hit=loaded['cache_hit'])
+                if args.business_metadata:
+                    from datamate_data.business_metadata import build_business_metadata
+                    business_metadata=build_business_metadata(prepared,source,model=semantic_model.model,dsn=os.environ['DATAMATE_PG_DSN'])
+                    item['business_metadata']={'version':business_metadata['version'],'tables':len(business_metadata['tables'])}
             report['businesses'].append(item)
             print(dumps(item),flush=True)
         report['status']='complete'

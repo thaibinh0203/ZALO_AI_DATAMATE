@@ -613,9 +613,15 @@ def build_semantic_plan(business, output_dir, *, rulebook, calendar, model, csv_
         payload = {'task': 'header', 'source_file': table.path.name, 'source_table': table.name,
                    'rows': [{'row': r.number, 'values': r.values} for r in preview], 'readme': readme,
                    'source_fingerprint': before}
-        value, error = model.complete(payload, audit_path)
-        if error or not value or set(value) != {'row', 'reason'}:
-            raise ValueError('SLM could not identify a source-backed Excel header')
+        for header_attempt in range(2):
+            value, error = model.complete(payload, audit_path)
+            if not error and isinstance(value, dict) and set(value) == {'row', 'reason'}:
+                break
+            if header_attempt == 0:
+                payload={**payload, 'header_contract_retry':
+                    'Return only row and reason. Do not include task or other keys. Select an existing source row; if uncertain use row=null.'}
+            else:
+                raise ValueError('SLM could not identify a source-backed Excel header')
         if type(value['row']) is not int:
             raise ValueError('SLM abstained on Excel header')
         index = next((i for i, r in enumerate(preview) if r.number == value['row']), None)

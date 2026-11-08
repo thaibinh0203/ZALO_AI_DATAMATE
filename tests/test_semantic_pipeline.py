@@ -554,4 +554,30 @@ class BoundedRefinementTests(unittest.TestCase):
         self.assertEqual(result[1]['semantic']['refinement']['reason'],'refinement_operational_role_collision')
 
 
+
+class HeaderContractRecovery(unittest.TestCase):
+    setUp=SemanticIntegration.setUp
+    tearDown=SemanticIntegration.tearDown
+    plan=SemanticIntegration.plan
+
+    def test_extra_header_keys_get_one_source_bound_retry(self):
+        from openpyxl import Workbook
+        book=Workbook();sheet=book.active
+        sheet.append(['Synthetic title'])
+        sheet.append(['Unmapped header A','Unmapped header B'])
+        sheet.append(['x','y'])
+        book.save(self.business/'export.xlsx')
+        class ExtraHeader(FakeSemanticModel):
+            def complete(self,payload,audit):
+                if payload['task']=='header':
+                    self.calls.append(payload)
+                    value={'row':2,'reason':'Existing synthetic header row'}
+                    if not payload.get('header_contract_retry'):value['task']='header'
+                    return value,None
+                return super().complete(payload,audit)
+        worker=ExtraHeader();plan=self.plan(worker)
+        self.assertEqual(len([r for r in worker.calls if r['task']=='header']),2)
+        self.assertEqual(next(iter(plan['headers'].values()))['row'],2)
+
+
 if __name__=='__main__':unittest.main()

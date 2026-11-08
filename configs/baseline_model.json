@@ -1,0 +1,17 @@
+{
+  "version": "baseline-sql-v1",
+  "repo_id": "Qwen/Qwen3-4B",
+  "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+  "device": "cuda:0",
+  "dtype": "bfloat16",
+  "max_context_tokens": 16384,
+  "max_new_tokens": 1024,
+  "seed": 42,
+  "do_sample": false,
+  "enable_thinking": false,
+  "sql_timeout_ms": 10000,
+  "max_result_rows": 1000,
+  "preview_enabled": false,
+  "sql_repairs": 0,
+  "calendar_lookup": false
+}
