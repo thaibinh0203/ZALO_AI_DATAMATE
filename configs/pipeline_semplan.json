@@ -1,0 +1,30 @@
+{
+  "version": "postgres-pipeline-v5-semplan",
+  "plan_schema_version": "business-semantic-plan-v1",
+  "model": {"repo_id": "Qwen/Qwen3-4B", "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+            "device": "cuda:0", "dtype": "bfloat16", "max_context_tokens": 16384, "max_new_tokens": 2048, "seed": 42,
+            "enable_thinking": false, "do_sample": false},
+  "model_caps": {
+    "header": 2,
+    "column_semantics": 2,
+    "column_refinement": 1,
+    "row_review": 2,
+    "table_plan": 2,
+    "table_refinement": 2,
+    "status_mapping": 2,
+    "max_model_calls_per_business": 600
+  },
+  "model_caps_note": "Per item caps count every attempt including contract retries and cache hits. table_refinement allows at most one refinement request per table plus one contract retry; refinement is attempted only when data checks contradict the proposal.",
+  "table_refinement_requests": 1,
+  "column_chunk_size": 5,
+  "row_review_max_groups": 12,
+  "row_review_samples_per_group": 4,
+  "rule_context_chars": 3500,
+  "sample_value_chars": 40,
+  "sample_scan_rows": 50000,
+  "repetition_min_groups": 5,
+  "repetition_ratio": 0.9,
+  "alias_learning": false,
+  "questions_read": false,
+  "note": "Opt-in v5 pipeline. v4 config/outputs are unchanged; publish only to new output directories."
+}
