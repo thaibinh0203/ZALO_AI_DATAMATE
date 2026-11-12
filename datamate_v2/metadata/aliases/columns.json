@@ -1,0 +1,195 @@
+{
+  "order_id": [
+    "mã đơn",
+    "mã đơn hàng",
+    "số đơn",
+    "mã hóa đơn",
+    "số hóa đơn",
+    "order_id",
+    "order id"
+  ],
+  "order_date": [
+    "ngày đặt",
+    "ngày đặt hàng",
+    "ngày bán",
+    "ngày hóa đơn",
+    "order_date"
+  ],
+  "date": [
+    "ngày",
+    "ngày phiếu",
+    "ngày phát sinh",
+    "date"
+  ],
+  "created_at": [
+    "giờ tạo đơn",
+    "thời gian tạo",
+    "created_at"
+  ],
+  "customer_id": [
+    "mã khách",
+    "mã khách hàng",
+    "customer_id"
+  ],
+  "customer_name": [
+    "tên khách hàng",
+    "khách hàng",
+    "tên khách",
+    "người mua",
+    "customer_name"
+  ],
+  "customer_group": [
+    "nhóm khách",
+    "nhóm khách hàng",
+    "customer_group"
+  ],
+  "product_id": [
+    "mã hàng",
+    "mã hàng hóa",
+    "mã sản phẩm",
+    "mã thuốc",
+    "product_id",
+    "sku"
+  ],
+  "product_name": [
+    "tên hàng",
+    "tên hàng hóa",
+    "tên sản phẩm",
+    "tên thuốc",
+    "mặt hàng",
+    "sản phẩm",
+    "product_name"
+  ],
+  "category": [
+    "nhóm hàng",
+    "nhóm hàng hóa",
+    "nhóm sản phẩm",
+    "loại hàng",
+    "category"
+  ],
+  "quantity": [
+    "số lượng",
+    "sl",
+    "qty",
+    "quantity"
+  ],
+  "base_quantity": [
+    "số lượng quy đổi",
+    "số lượng cơ bản",
+    "base_quantity",
+    "số lượng đã đổi ra đơn vị cơ bản",
+    "số lượng đã quy đổi ra đơn vị cơ bản"
+  ],
+  "unit": [
+    "đơn vị",
+    "đơn vị tính",
+    "đvt",
+    "dvt",
+    "unit"
+  ],
+  "unit_price": [
+    "đơn giá",
+    "giá bán một sản phẩm",
+    "unit_price"
+  ],
+  "line_total": [
+    "thành tiền",
+    "thành tiền sau giảm",
+    "tiền hàng",
+    "line_total"
+  ],
+  "amount_paid": [
+    "đã trả",
+    "tiền đã trả",
+    "khách đã trả",
+    "amount_paid"
+  ],
+  "amount": [
+    "số tiền",
+    "amount"
+  ],
+  "revenue": [
+    "doanh thu",
+    "revenue"
+  ],
+  "discount": [
+    "giảm giá",
+    "chiết khấu",
+    "discount"
+  ],
+  "unit_cost": [
+    "giá vốn",
+    "giá vốn đơn vị",
+    "unit_cost"
+  ],
+  "status": [
+    "trạng thái",
+    "tình trạng",
+    "status"
+  ],
+  "payment_method": [
+    "hình thức thanh toán",
+    "phương thức thanh toán",
+    "payment_method"
+  ],
+  "payment_date": [
+    "ngày thanh toán",
+    "ngày trả",
+    "ngày thu",
+    "payment_date"
+  ],
+  "due_date": [
+    "hạn thanh toán",
+    "ngày đến hạn",
+    "due_date"
+  ],
+  "expiry_date": [
+    "hạn dùng",
+    "hạn sử dụng",
+    "ngày hết hạn",
+    "expiry_date"
+  ],
+  "employee_id": [
+    "mã nhân viên",
+    "employee_id"
+  ],
+  "employee_name": [
+    "nhân viên",
+    "tên nhân viên",
+    "employee_name"
+  ],
+  "branch": [
+    "chi nhánh",
+    "cửa hàng",
+    "branch"
+  ],
+  "supplier_id": [
+    "mã nhà cung cấp",
+    "supplier_id"
+  ],
+  "supplier_name": [
+    "nhà cung cấp",
+    "tên nhà cung cấp",
+    "supplier_name"
+  ],
+  "stock": [
+    "tồn kho",
+    "số lượng tồn",
+    "tồn cuối",
+    "stock"
+  ],
+  "conversion_factor": [
+    "hệ số quy đổi",
+    "hệ số",
+    "conversion_factor"
+  ],
+  "percent": [
+    "tỷ lệ phần trăm",
+    "percent"
+  ],
+  "note": [
+    "ghi chú",
+    "diễn giải",
+    "note"
+  ]
+}

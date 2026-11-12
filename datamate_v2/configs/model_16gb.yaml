@@ -1,0 +1,82 @@
+# Explicit 4-bit weights for the two larger models; original model.yaml stays BF16.
+active_model: qwen3_4b
+models:
+  qwen3_4b:
+    repo_id: Qwen/Qwen3-4B
+    revision: 1cfa9a7208912126459214e8b04321603b3df60c
+    path: models/qwen3-4b
+    backend: transformers
+    model_class: AutoModelForCausalLM
+    device: cuda:0
+    dtype: bfloat16
+    local_files_only: true
+    trust_remote_code: false
+    verify_checksums: true
+    max_context_tokens: 32768
+    max_new_tokens: 4096
+    seed: 42
+    chat_template_kwargs:
+      enable_thinking: false
+    task_max_new_tokens:
+      column_normalization: 2048
+      value_normalization: 2048
+      schema_description: 8192
+      query_rewriting: 2048
+      planning_sql: 4096
+  qwen25_7b:
+    repo_id: Qwen/Qwen2.5-7B-Instruct
+    revision: a09a35458c702b33eeacc393d103063234e8bc28
+    path: models/qwen2.5-7b-instruct
+    backend: transformers
+    model_class: AutoModelForCausalLM
+    device: cuda:0
+    dtype: bfloat16
+    local_files_only: true
+    trust_remote_code: false
+    verify_checksums: true
+    max_context_tokens: 32768
+    max_new_tokens: 4096
+    seed: 42
+    chat_template_kwargs: {}
+    task_max_new_tokens:
+      column_normalization: 2048
+      value_normalization: 2048
+      schema_description: 8192
+      query_rewriting: 2048
+      planning_sql: 4096
+    quantization:
+      backend: bitsandbytes
+      bits: 4
+      type: nf4
+      double_quant: true
+    attn_implementation: sdpa
+    logits_to_keep: 1
+  gemma4_12b:
+    repo_id: google/gemma-4-12B-it
+    revision: 43c9d014b231474fa7212dbb48a762566c2b255d
+    path: models/gemma-4-12b-it
+    backend: transformers
+    model_class: AutoModelForMultimodalLM
+    device: cuda:0
+    dtype: bfloat16
+    local_files_only: true
+    trust_remote_code: false
+    verify_checksums: true
+    max_context_tokens: 32768
+    max_new_tokens: 4096
+    seed: 42
+    chat_template_kwargs:
+      enable_thinking: false
+    task_max_new_tokens:
+      column_normalization: 2048
+      value_normalization: 2048
+      schema_description: 8192
+      query_rewriting: 2048
+      planning_sql: 4096
+    quantization:
+      backend: bitsandbytes
+      bits: 4
+      type: nf4
+      double_quant: true
+    attn_implementation: sdpa
+    logits_to_keep: 1

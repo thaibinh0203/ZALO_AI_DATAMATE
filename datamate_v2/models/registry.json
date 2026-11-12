@@ -1,0 +1,32 @@
+{
+  "qwen3_4b": {
+    "repo_id": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "parameter_count": 4022468096,
+    "license": "apache-2.0",
+    "original_release_date": "2025-04-29",
+    "source_url": "https://huggingface.co/Qwen/Qwen3-4B"
+  },
+  "qwen25_7b": {
+    "repo_id": "Qwen/Qwen2.5-7B-Instruct",
+    "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+    "parameter_count": 7615616512,
+    "parameter_count_source": "Hugging Face safetensors metadata at pinned revision",
+    "license": "apache-2.0",
+    "original_release_date": "2024-09-19",
+    "release_source": "https://qwenlm.github.io/blog/qwen2.5/",
+    "source_url": "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct",
+    "repository_created_at": "2024-09-16T11:55:40.000Z"
+  },
+  "gemma4_12b": {
+    "repo_id": "google/gemma-4-12B-it",
+    "revision": "43c9d014b231474fa7212dbb48a762566c2b255d",
+    "parameter_count": 11959730224,
+    "parameter_count_source": "Hugging Face safetensors metadata at pinned revision",
+    "license": "apache-2.0",
+    "original_release_date": "2026-06-03",
+    "release_source": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemma-4-12b/",
+    "source_url": "https://huggingface.co/google/gemma-4-12B-it",
+    "repository_created_at": "2026-05-23T01:17:15.000Z"
+  }
+}

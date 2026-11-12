@@ -1,0 +1,16 @@
+# Development runner: single container, PostgreSQL through a Unix socket.
+services:
+  datamate:
+    build:
+      context: runtime/docker-context
+      args:
+        MODEL_DIR: ${MODEL_DIR:-qwen3-4b}
+        MODEL_KEY: ${MODEL_KEY:-qwen3_4b}
+    network_mode: none
+    gpus: all
+    volumes:
+      - ${DATAMATE_INPUT:-../docs/train}:/data:ro
+      - ${DATAMATE_RESULT:-./runtime/result}:/result
+    environment:
+      HF_HUB_OFFLINE: '1'
+      TRANSFORMERS_OFFLINE: '1'

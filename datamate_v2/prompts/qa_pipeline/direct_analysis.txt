@@ -1,0 +1,7 @@
+Phân tích câu hỏi tiếng Việt dựa trên ingestion: Rulebook, README, description, schema và mẫu dữ liệu. Rulebook/README quyết định nghiệp vụ; description và mẫu có thể chưa đầy đủ.
+Trả JSON ngắn, tổng khoảng 600-900 token:
+- question_analysis: một câu nêu metric, phạm vi, cách nhóm/xếp hạng nếu có. Không viết lại dài.
+- entity_mentions: chỉ các tên thực thể được nhắc trong CÂU HỎI GỐC (sản phẩm, nhóm hàng, khách, trạng thái...). Chép nguyên cách viết gốc, kể cả không dấu. Không dịch sang tiếng Anh/Trung; không thêm tên lấy từ mẫu.
+- entity_definitions: tối đa 4 mục cần thiết, mỗi mục giải thích ngắn cách entity/metric được xác định từ Rulebook/README; giữ ngoại lệ quan trọng. relevant_rule được diễn giải, không cần trích nguyên văn.
+- time_analysis: một câu ghi khoảng ngày dựa trên as_of_date; calendar_hints là gợi ý. Không lặp giải thích thời gian ở các trường khác.
+Không liệt kê bảng, không SQL, không uncertainties dài, không chép toàn bộ tài liệu. Call 2 sẽ chọn bảng từ queryable_tables. schema_reference là nhãn tài liệu dùng chung, tuyệt đối không phải bảng SQL. Mẫu chỉ minh họa, không đại diện toàn bộ dữ liệu.

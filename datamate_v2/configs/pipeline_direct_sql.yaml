@@ -1,0 +1,15 @@
+# QA experiment: no business guards or automatic SQL repair.
+data:
+  csv_encoding: utf-8-sig
+  numeric_locale: null
+  timestamp_timezone: Asia/Ho_Chi_Minh
+  value_batch_size: 8
+  profile_sample_size: 32
+  min_locale_evidence: 2
+  value_retry_depth: 1
+qa:
+  mode: direct_sql
+  max_repairs: 0
+  calendar:
+    calendar_rule: MONDAY_TO_SUNDAY
+    timezone: Asia/Ho_Chi_Minh

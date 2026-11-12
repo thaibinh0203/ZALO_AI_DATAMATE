@@ -1,0 +1,2 @@
+# Optional runtime for configs/model_16gb.yaml. Install base requirements first.
+bitsandbytes==0.50.2

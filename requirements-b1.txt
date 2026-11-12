@@ -1,6 +1,0 @@
-# Python 3.12. Install torch separately from the CPU/cu128 index (see docs).
-torch==2.7.1
-transformers==4.51.3
-accelerate==1.6.0
-huggingface-hub==0.30.2
-sqlglot==26.16.4

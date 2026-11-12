@@ -1,0 +1,11 @@
+Đọc câu hỏi gốc, Rulebook và README trước khi đưa ra quyết định. Metadata/data/schema/value_dictionaries là bằng chứng về cấu trúc và giá trị thật, không tự tạo chính sách nghiệp vụ từ vài dòng mẫu.
+Trả JSON quyết định ngắn, tối đa khoảng 1200 token:
+- goal: metric và phạm vi cần trả lời.
+- entity_mentions: chép nguyên tên sản phẩm/khách/nhóm được nhắc trong câu hỏi, không dịch sang ngôn ngữ khác. Không thêm tên từ mẫu.
+- rules_to_apply: chỉ các QUYẾT ĐỊNH áp dụng có căn cứ trong Rulebook hoặc README. source phải là rulebook/readme. action diễn giải thao tác cụ thể và ngoại lệ (đơn hủy/trả, khách lẻ, đơn đang giao, dòng phí...), không cần trích nguyên văn. Nếu không tìm được quy tắc thì không bịa. Không lặp toàn bộ đoạn tài liệu.
+- aggregation: mô tả BẰNG LỜI cách tính, grain, khóa đếm duy nhất, nhóm, xếp hạng, tử/mẫu và phép so sánh nếu cần. Đơn hàng nhiều dòng thì đếm mã đơn duy nhất; đợt giao là mỗi cặp mã đơn/lần giao theo quy tắc nguồn. Với phép tính phức tạp mô tả từng bước ngắn, không ép vào một enum toán tử.
+- time_requests: mỗi khoảng cần tính là một request riêng với name duy nhất, interpretation và parameters theo schema; status=proposed (ambiguous nếu không thể xác định). Python sẽ tính ngày cụ thể. Với so sánh hai kỳ phải nêu cả hai kỳ. Không tự nhẩm khoảng ngày của thời gian tương đối. calendar_hints giúp nhận dạng loại kỳ.
+- data_requirements: mô tả loại dữ liệu cần hợp nhất/ghép, không chép danh mục tên bảng.
+- requires_full_history: true nếu cần lịch sử trước kỳ để tính tồn, nợ, thay đổi giá hoặc tập hàng từng bán; false khi chỉ hỏi phát sinh trong các kỳ.
+Các dictionary chứa giá trị THẬT theo từng bảng/cột, chỉ ghi một lần khi giống nhau. Giữ dấu tiếng Việt. Khách lẻ có thể có nhiều cách ghi: cần xem danh mục cùng quy tắc để quyết định cả nhóm biến thể, không chỉ một chuỗi.
+Không SQL, không giới thiệu, không lặp câu giải thích thời gian và không liệt kê tất cả tháng/bảng. Không coi schema_reference hay id dictionary là bảng SQL.

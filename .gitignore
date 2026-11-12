@@ -1,52 +1,39 @@
-.venv*/
+/.venv/
 __pycache__/
 *.py[cod]
-.cache/
-models/
-outputs/
-# Commit only compact final reports under artifacts/data_pipeline_final.
-*.safetensors
-*.bin
-*.gguf
-
-# Local credentials and tool state
+.pytest_cache/
+/datamate_v2/runtime/
+/datamate_v2/models/*/
+!/datamate_v2/models/README.md
+!/datamate_v2/models/registry.json
+*.tar
+*.tar.gz
 .env
 .env.*
 !.env.example
-.aws/
-.codex/
-.agents/
-.ssh/
-*.pem
-*.key
-
-# OS/editor/session artifacts
+/.aws/
+/.agents/
+/.codex/
 *:Zone.Identifier
+*.safetensors
+*.gguf
+*.zip
+*.log
+.ipynb_checkpoints/
 .Rhistory
-.DS_Store
-.idea/
-.vscode/
-
-# Local publish archives
-*.bundle
-.git-publish/
-
-# Large source datasets; retain the business documentation
-/docs/*.zip
-/docs/train/data/**
-!/docs/train/data/**/
-!/docs/train/data/**/README.md
-!/docs/train/data/**/README.html
-/docs/public_test/data/**
-!/docs/public_test/data/**/
-!/docs/public_test/data/**/README.md
-!/docs/public_test/data/**/README.html
-/docs/train/*.jsonl
-/docs/public_test/*.jsonl
-/docs/train/calendar.csv
-/docs/public_test/calendar.csv
-/artifacts/data_split_v1/inputs/
-/artifacts/data_split_v1/evaluator/
-
-# Temporary experiment/rollback snapshots
-/artifacts/refinement_experiment_v*/
+# Local data stays on this machine; restore the official data separately.
+/docs/train/
+/docs/public_test/
+# Development-only benchmark harness, not the reusable pipeline.
+/datamate_v2/notebooks/
+/datamate_v2/scripts/*50.sh
+/datamate_v2/scripts/run_two_biz50.sh
+/datamate_v2/scripts/show_structured_results.sh
+/datamate_v2/scripts/package_kaggle.py
+/datamate_v2/scripts/watch_model_preparation.py
+/datamate_v2/scripts/run_compare.sh
+/datamate_v2/models/RUN_*.md
+/datamate_v2/*.html
+/datamate_v2/IMPLEMENTATION_NOTES.md
+/datamate_v2/VALIDATION.md
+/docs/*.html

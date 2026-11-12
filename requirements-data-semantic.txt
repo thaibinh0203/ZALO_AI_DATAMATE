@@ -1,3 +1,0 @@
-# Python 3.12. Install the tested CUDA torch wheel first (see DATA_PIPELINE.md).
--r requirements-b1.txt
--r requirements-data.txt

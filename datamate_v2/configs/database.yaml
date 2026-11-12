@@ -1,0 +1,7 @@
+admin_dsn_env: DATAMATE_ADMIN_DSN
+readonly_dsn_env: DATAMATE_READONLY_DSN
+readonly_role: datamate_reader
+statement_timeout_ms: 10000
+connect_timeout_seconds: 10
+max_result_rows: 10000
+timezone: Asia/Ho_Chi_Minh

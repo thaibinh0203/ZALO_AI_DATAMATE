@@ -1,0 +1,14 @@
+transformers==5.22.2
+accelerate==1.15.0
+huggingface-hub==2.4.0
+safetensors==0.8.0
+tokenizers==0.23.3
+PyYAML==6.0.3
+openpyxl==3.1.5
+xlrd==2.0.2
+psycopg[binary]==3.2.13
+sqlglot==26.16.4
+jsonschema==4.26.0
+python-dateutil==4.0.0
+simplejson==4.3.0
+lm-format-enforcer==0.11.3
