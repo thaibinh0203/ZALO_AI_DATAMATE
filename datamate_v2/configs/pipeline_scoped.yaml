@@ -1,0 +1,18 @@
+data:
+  csv_encoding: utf-8-sig
+  numeric_locale: null
+  timestamp_timezone: Asia/Ho_Chi_Minh
+  value_batch_size: 8
+  profile_sample_size: 32
+  min_locale_evidence: 2
+  value_retry_depth: 1
+qa:
+  mode: direct_sql
+  decision_planning: true
+  scoped_context: true
+  values_token_budget: 2500
+  rules_token_budget: 3500
+  max_repairs: 0
+  calendar:
+    calendar_rule: MONDAY_TO_SUNDAY
+    timezone: Asia/Ho_Chi_Minh

@@ -1,6 +1,7 @@
 Đọc câu hỏi gốc, Rulebook và README trước khi đưa ra quyết định. Metadata/data/schema/value_dictionaries là bằng chứng về cấu trúc và giá trị thật, không tự tạo chính sách nghiệp vụ từ vài dòng mẫu.
 Trả JSON quyết định ngắn, tối đa khoảng 1200 token:
 - goal: metric và phạm vi cần trả lời.
+- metric: tên nghiệp vụ chuẩn hóa ngắn như doanh thu, số đơn, số đợt giao, số lượng bán, công nợ... để tìm đúng luật. requested_units: đơn vị được hỏi, chép nguyên tiếng Việt; để [] nếu không có. Với câu hỏi theo số lượng hoặc đơn vị lớn, cần tìm quy đổi của đúng sản phẩm trong README/Rulebook, không mặc định hệ số.
 - entity_mentions: chép nguyên tên sản phẩm/khách/nhóm được nhắc trong câu hỏi, không dịch sang ngôn ngữ khác. Không thêm tên từ mẫu.
 - rules_to_apply: chỉ các QUYẾT ĐỊNH áp dụng có căn cứ trong Rulebook hoặc README. source phải là rulebook/readme. action diễn giải thao tác cụ thể và ngoại lệ (đơn hủy/trả, khách lẻ, đơn đang giao, dòng phí...), không cần trích nguyên văn. Nếu không tìm được quy tắc thì không bịa. Không lặp toàn bộ đoạn tài liệu.
 - aggregation: mô tả BẰNG LỜI cách tính, grain, khóa đếm duy nhất, nhóm, xếp hạng, tử/mẫu và phép so sánh nếu cần. Đơn hàng nhiều dòng thì đếm mã đơn duy nhất; đợt giao là mỗi cặp mã đơn/lần giao theo quy tắc nguồn. Với phép tính phức tạp mô tả từng bước ngắn, không ép vào một enum toán tử.

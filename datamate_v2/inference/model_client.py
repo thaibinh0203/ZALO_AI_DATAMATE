@@ -8,7 +8,8 @@ from datamate_v2.progress import emit
 PROMPTS={"column_normalization":"data_pipeline/column_normalization.txt","value_normalization":"data_pipeline/value_normalization.txt",
  "schema_description":"data_pipeline/schema_description.txt","query_rewriting":"qa_pipeline/query_rewriting.txt",
  "planning_sql":"qa_pipeline/planning_sql_generation.txt",
- "qa_analysis":"qa_pipeline/direct_analysis.txt","qa_decisions":"qa_pipeline/decisions.txt","qa_sql":"qa_pipeline/direct_sql.txt"}
+ "qa_analysis":"qa_pipeline/direct_analysis.txt","qa_decisions":"qa_pipeline/decisions.txt",
+ "qa_sql":"qa_pipeline/direct_sql.txt","qa_scoped_sql":"qa_pipeline/scoped_sql.txt"}
 
 class ModelClient:
     def __init__(self,engine,settings,cache_dir=None):
@@ -38,7 +39,7 @@ class ModelClient:
             try:
                 generation_options={}
                 if getattr(self.engine,'supports_structured_output',False):
-                    budget_task={'qa_analysis':'query_rewriting','qa_decisions':'query_rewriting','qa_sql':'planning_sql'}.get(task,task)
+                    budget_task={'qa_analysis':'query_rewriting','qa_decisions':'query_rewriting','qa_sql':'planning_sql','qa_scoped_sql':'planning_sql'}.get(task,task)
                     generation_options={'schema':schema,'max_new_tokens':self.settings.get('task_max_new_tokens',{}).get(budget_task,self.settings.get('max_new_tokens',4096))}
                 generated=self.engine.generate(messages,**generation_options);record.update(generated)
                 raw=generated["text"]

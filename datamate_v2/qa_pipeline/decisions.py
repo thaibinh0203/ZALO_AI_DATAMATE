@@ -21,7 +21,9 @@ def request_schema():
 DECISION_SCHEMA={'type':'object','additionalProperties':False,
     'required':['goal','entity_mentions','rules_to_apply','aggregation','time_requests','data_requirements','requires_full_history'],
     'properties':{
-        'goal':text(180),'entity_mentions':{'type':'array','maxItems':6,'items':text(100)},
+        'goal':text(180),'metric':text(100),
+        'requested_units':{'type':'array','maxItems':4,'items':text(40)},
+        'entity_mentions':{'type':'array','maxItems':6,'items':text(100)},
         'rules_to_apply':{'type':'array','maxItems':6,'items':{'type':'object','additionalProperties':False,
             'required':['source','action'],'properties':{'source':{'enum':['rulebook','readme']},'action':text(220)}}},
         'aggregation':text(500),'time_requests':{'type':'array','maxItems':4,'items':request_schema()},

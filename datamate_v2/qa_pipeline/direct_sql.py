@@ -142,10 +142,23 @@ def answer_direct(pipeline,question,metadata):
             else:
                 analysis=pipeline.client.call('qa_analysis',payload,ANALYSIS_SCHEMA)
             log['analysis']=analysis
+        query_metadata=metadata;sql_analysis=analysis
+        focused=decision_mode and pipeline.settings.get('scoped_context',False)
         if decision_mode:
             from .decisions import resolve_decision_times,assemble_sources
             payload['resolved_time']=resolve_decision_times(question,analysis,metadata,pipeline.settings['calendar'])
-            payload['data_assembly']=assemble_sources(metadata,payload['resolved_time'],analysis.get('requires_full_history',False))
+            if focused:
+                from .focused_context import call2_context
+                query_metadata,context,sql_analysis,focus=call2_context(metadata,question,analysis,payload['resolved_time'],
+                    pipeline.settings['calendar'],count_tokens,min(3000,pipeline.settings.get('values_token_budget',2500)),
+                    pipeline.settings.get('rules_token_budget',3500))
+                payload['business_context']=context
+                payload['calendar_hints']=None  # Concrete resolved_time is the authority now.
+                payload['scoped_context']=True
+                log['scope']=focus['routing'];log['rule_retrieval']=focus['retrieval']
+                log['retrieved_sources']=focus['fragments'];log['call2_value_dictionary_budget']=focus['values']
+                log['call2_context_summary']={'tables':len(context['queryable_tables']),'characters':len(dumps(context))}
+            payload['data_assembly']=assemble_sources(query_metadata,payload['resolved_time'],True if focused else analysis.get('requires_full_history',False))
             payload['decision_mode']=True
             log['resolved_time']=payload['resolved_time'];log['data_assembly']=payload['data_assembly']
         from .direct_entities import domain_columns,entity_hints,validate_literals
@@ -158,6 +171,9 @@ def answer_direct(pipeline,question,metadata):
                 cache[cache_key]=tool.text_domains(columns) if columns else []
                 pipeline._direct_domains=cache
             domains=cache[cache_key]
+            if focused:
+                selected={t['sql_table'] for t in query_metadata['tables']}
+                domains=[d for d in domains if d['table'] in selected]
             payload['entity_catalog']=entity_hints(domains,question['question'],analysis)
             if decision_mode:
                 # Low-cardinality lists already appear once, within their budget.
@@ -165,7 +181,7 @@ def answer_direct(pipeline,question,metadata):
                     for d in payload['entity_catalog']['columns'] if d['matched_question_values']]
             log['entity_resolution']=payload['entity_catalog']
         with profiler.stage('call_2',model_call_index=2):
-            plan=pipeline.client.call('qa_sql',{**payload,'analysis':analysis},SQL_SCHEMA)
+            plan=pipeline.client.call('qa_scoped_sql' if focused else 'qa_sql',{**payload,'analysis':sql_analysis},SQL_SCHEMA)
             log['plan']=plan;log['model_sql']=plan.get('sql')
         if plan['status']!='answerable':
             final={'id':question['id'],'type':plan['status']}
@@ -174,7 +190,8 @@ def answer_direct(pipeline,question,metadata):
             if not isinstance(plan['sql'],str) or not plan['sql'].strip():
                 raise PipelineError('Answerable output requires SQL')
             with profiler.stage('entity_literal_validation'):
-                checked,adjustments=validate_literals(plan['sql'],metadata,domains,tool)
+                checked=execution_guard(plan['sql'],query_metadata)
+                checked,adjustments=validate_literals(checked,query_metadata,domains,tool)
                 log['entity_literal_adjustments']=adjustments;log['sql']=checked
             with profiler.stage('postgres_execution'):
                 result=tool.execute_readonly_sql(checked,purpose='answer')

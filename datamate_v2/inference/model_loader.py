@@ -88,7 +88,10 @@ class LocalEngine:
         cls=getattr(transformers,class_name,None)
         if cls is None: raise PipelineError(f"Transformers lacks {class_name}; update dependencies")
         torch.manual_seed(settings.get("seed",42))
-        options=dict(dtype=dtype,device_map=device,**kwargs)
+        dispatch=settings.get('device_map',device)
+        if isinstance(dispatch,str) and dispatch not in (device,'auto','balanced','balanced_low_0','sequential'):
+            raise PipelineError('Unsupported device_map strategy')
+        options=dict(dtype=dtype,device_map=dispatch,**kwargs)
         if settings.get('attn_implementation'):
             options['attn_implementation']=settings['attn_implementation']
         options.update(quantization_options(settings))

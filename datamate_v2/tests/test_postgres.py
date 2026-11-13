@@ -66,7 +66,8 @@ def test_direct_entity_domains_are_actual_column_values(pg_settings):
     assert answer['answer']=='2026-07-30'
 
 
-def test_decisions_two_month_cte_executes_with_source_grounded_actions(pg_settings):
+@pytest.mark.parametrize('scoped',[False,True])
+def test_decisions_two_month_cte_executes_with_source_grounded_actions(pg_settings,scoped):
     from datamate_v2.data_pipeline.value_catalog import build_value_catalog
     from datamate_v2.inference.structured_output import parse_output
     from datamate_v2.common import dumps
@@ -103,7 +104,7 @@ def test_decisions_two_month_cte_executes_with_source_grounded_actions(pg_settin
                     'list_mode':'row','unit':'','round_digits':None}
             return parse_output(dumps(result),schema)
     client=Client();q={'id':'q','business_id':'decisions_test','question':'Số đơn tuần rồi?', 'as_of_date':'2026-03-04'}
-    final,log=QAPipeline(client,pg_settings,{'mode':'direct_sql','decision_planning':True,
+    final,log=QAPipeline(client,pg_settings,{'mode':'direct_sql','decision_planning':True,'scoped_context':scoped,
         'max_repairs':0,'calendar':{'calendar_rule':'MONDAY_TO_SUNDAY','timezone':'Asia/Ho_Chi_Minh'}}).answer(q,md)
     assert final=={'id':'q','type':'number','answer':2},log
     assert len(client.calls)==2 and log['value_dictionary_budget']['tokens']<=2500

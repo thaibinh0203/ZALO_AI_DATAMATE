@@ -37,3 +37,8 @@ __pycache__/
 /datamate_v2/IMPLEMENTATION_NOTES.md
 /datamate_v2/VALIDATION.md
 /docs/*.html
+# Cloud/Kaggle orchestration stays local to this workspace.
+/datamate_v2/scripts/package_full_train_kaggle.py
+/datamate_v2/scripts/run_full_train.py
+/datamate_v2/tests/test_full_train.py
+/datamate_v2/tests/test_partial_eval_cell.py

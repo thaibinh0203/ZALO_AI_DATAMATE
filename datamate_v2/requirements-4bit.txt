@@ -1,2 +1,3 @@
-# Optional runtime for configs/model_16gb.yaml. Install base requirements first.
+# Shared dependencies plus the optional NF4 runtime.
+-r requirements.txt
 bitsandbytes==0.50.2
